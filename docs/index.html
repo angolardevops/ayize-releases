@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ayize — Documentação</title>
+<style>
+  :root { --bg:#0d1117; --fg:#e6edf3; --mut:#9da7b3; --acc:#7ee787; --acc2:#79c0ff;
+          --card:#161b22; --bd:#30363d; --code:#0b0f14; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg);
+         font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; }
+  .layout { display:flex; max-width:1180px; margin:0 auto; }
+  aside { width:230px; flex:none; position:sticky; top:0; align-self:flex-start; height:100vh;
+          overflow:auto; border-right:1px solid var(--bd); padding:22px 14px 40px; }
+  aside h4 { color:var(--mut); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em;
+             margin:18px 0 6px; }
+  aside a { display:block; color:var(--fg); text-decoration:none; font-size:.9rem; padding:2px 0; }
+  aside a:hover { color:var(--acc2); }
+  main { flex:1; min-width:0; padding:0 28px 90px; }
+  .wrap { max-width:820px; }
+  header { padding:40px 0 8px; }
+  h1 { font-size:2.5rem; margin:0; letter-spacing:-.5px; }
+  h1 .v { color:var(--mut); font-size:1rem; font-weight:400; letter-spacing:0; }
+  .tag { color:var(--mut); margin:8px 0 0; font-size:1.05rem; }
+  .pill { display:inline-block; background:#1f6feb22; color:var(--acc2); border:1px solid #1f6feb55;
+          border-radius:999px; padding:1px 10px; font-size:.78rem; margin:2px 4px 2px 0; }
+  .hero-install { background:var(--card); border:1px solid var(--bd); border-radius:10px;
+                  padding:16px 18px; margin:22px 0 8px; }
+  .hero-install .lbl { color:var(--mut); font-size:.85rem; margin:0 0 8px; }
+  .topbar { position:sticky; top:0; background:var(--bg); border-bottom:1px solid var(--bd);
+            padding:9px 0; margin-bottom:4px; z-index:5; display:flex; align-items:center; }
+  .langsw { margin-left:auto; display:flex; gap:6px; }
+  .langsw button { background:transparent; color:var(--mut); border:1px solid var(--bd);
+                   border-radius:6px; padding:3px 9px; cursor:pointer; font-size:.82rem; }
+  .langsw button.on { color:var(--bg); background:var(--acc2); border-color:var(--acc2); font-weight:600; }
+  h2 { font-size:1.6rem; margin:46px 0 10px; padding-top:14px; border-top:1px solid var(--bd); color:var(--acc); }
+  h3 { font-size:1.18rem; margin:26px 0 6px; color:var(--acc2); }
+  h4.sub { color:var(--fg); margin:18px 0 4px; font-size:1.02rem; }
+  p, li { color:var(--fg); }
+  code { background:var(--code); padding:1px 5px; border-radius:4px; font-size:.9em;
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color:#ffa657; }
+  pre { background:var(--code); border:1px solid var(--bd); border-radius:8px; padding:14px 16px; overflow:auto; }
+  pre code { background:none; padding:0; color:#d2dae4; font-size:.88rem; }
+  .t-comment { color:#6b7785; font-style:italic; }
+  .t-string  { color:#7ee787; }
+  .t-number  { color:#f0883e; }
+  .t-kw      { color:#ff7b9c; }
+  .t-shell   { color:#79c0ff; }
+  table { border-collapse:collapse; width:100%; margin:10px 0; font-size:.92rem; }
+  th, td { border:1px solid var(--bd); padding:6px 10px; text-align:left; vertical-align:top; }
+  th { background:var(--card); color:var(--acc2); }
+  td code { white-space:nowrap; }
+  .note { background:#1f6feb14; border-left:3px solid var(--acc2); padding:10px 14px; border-radius:0 6px 6px 0; margin:14px 0; }
+  footer { color:var(--mut); border-top:1px solid var(--bd); margin-top:54px; padding-top:16px; font-size:.9rem; }
+  a { color:var(--acc2); }
+  @media (max-width:880px){ aside{display:none;} main{padding:0 18px 80px;} }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside>
+  <h4 data-i18n="toc-basics">Básico</h4>
+  <a href="#intro" data-i18n="nav-intro">O que é o Ayize</a>
+  <a href="#compare" data-i18n="nav-compare">Comparação</a>
+  <a href="#install" data-i18n="nav-install">Instalação</a>
+  <a href="#start" data-i18n="nav-start">Primeiros passos</a>
+  <a href="#project" data-i18n="nav-project">Criar um projecto</a>
+  <a href="#validate" data-i18n="nav-validate">Validar a instalação</a>
+  <h4 data-i18n="toc-lang">Linguagem</h4>
+  <a href="#types" data-i18n="nav-types">Valores e tipos</a>
+  <a href="#vars" data-i18n="nav-vars">Variáveis e operadores</a>
+  <a href="#strings" data-i18n="nav-strings">Strings</a>
+  <a href="#coll" data-i18n="nav-coll">Colecções</a>
+  <a href="#flow" data-i18n="nav-flow">Controlo de fluxo</a>
+  <a href="#fn" data-i18n="nav-fn">Funções</a>
+  <h4 data-i18n="toc-para">Paradigmas</h4>
+  <a href="#fp" data-i18n="nav-fp">Programação funcional</a>
+  <a href="#oop" data-i18n="nav-oop">Structs e contratos</a>
+  <a href="#gof" data-i18n="nav-gof">Padrões (GoF)</a>
+  <a href="#err" data-i18n="nav-err">Erros e defer</a>
+  <h4 data-i18n="toc-adv">Avançado</h4>
+  <a href="#modules" data-i18n="nav-modules">Módulos e stdlib</a>
+  <a href="#ai" data-i18n="nav-ai">Tensores e IA</a>
+  <a href="#llm" data-i18n="nav-llm">Construir um LLM</a>
+  <a href="#gpu">GPU</a>
+  <h4 data-i18n="toc-ref">Referência</h4>
+  <a href="#apx-kw" data-i18n="nav-apx-kw">Apêndice A · keywords</a>
+  <a href="#apx-op" data-i18n="nav-apx-op">Apêndice B · operadores</a>
+  <a href="#apx-bi" data-i18n="nav-apx-bi">Apêndice C · builtins</a>
+</aside>
+
+<main>
+<div class="topbar">
+  <span class="langsw">
+    <button data-lang="pt-PT" class="on">PT</button>
+    <button data-lang="pt-BR">BR</button>
+    <button data-lang="en">EN</button>
+  </span>
+</div>
+
+<div class="wrap">
+<header>
+  <h1>Ayize <span class="v">· documentação</span></h1>
+  <p class="tag" data-i18n="tagline"></p>
+  <p><span class="pill">interpretador</span><span class="pill">JIT</span>
+     <span class="pill">GPU CUDA + wgpu</span><span class="pill">autograd</span>
+     <span class="pill" data-i18n="pill-deps"></span></p>
+  <div class="hero-install">
+    <p class="lbl" data-i18n="install-lbl"></p>
+    <pre><code class="shell">curl --proto '=https' --tlsv1.2 -sSf \
+  https://raw.githubusercontent.com/angolardevops/ayize-releases/main/install.sh | sh</code></pre>
+  </div>
+</header>
+
+<!-- ───────────────────────── INTRODUÇÃO ───────────────────────── -->
+<h2 id="intro" data-i18n="h-intro"></h2>
+<p data-i18n="intro-1"></p>
+<h3 data-i18n="h-intro-obj"></h3>
+<p data-i18n="intro-obj"></p>
+<h3 data-i18n="h-intro-focus"></h3>
+<ul data-i18n="intro-focus"></ul>
+
+<!-- ───────────────────────── COMPARAÇÃO ───────────────────────── -->
+<h2 id="compare" data-i18n="h-compare"></h2>
+<p data-i18n="compare-1"></p>
+<div data-i18n="compare-table"></div>
+<p class="note" data-i18n="compare-note"></p>
+
+<!-- ───────────────────────── INSTALAÇÃO ───────────────────────── -->
+<h2 id="install" data-i18n="h-install"></h2>
+<p data-i18n="install-1"></p>
+<pre><code class="shell">curl --proto '=https' --tlsv1.2 -sSf \
+  https://raw.githubusercontent.com/angolardevops/ayize-releases/main/install.sh | sh
+ayize --help</code></pre>
+<p data-i18n="install-2"></p>
+
+<!-- ───────────────────────── PRIMEIROS PASSOS ───────────────────────── -->
+<h2 id="start" data-i18n="h-start"></h2>
+<p data-i18n="start-1"></p>
+<pre><code>fn main() {
+    print("Olá, Ayize!")
+}</code></pre>
+<pre><code class="shell">$ ayize run hello.az
+Olá, Ayize!</code></pre>
+<p data-i18n="start-2"></p>
+<div data-i18n="start-cmds"></div>
+
+<!-- ───────────────────────── PROJECTO ───────────────────────── -->
+<h2 id="project" data-i18n="h-project"></h2>
+<p data-i18n="project-1"></p>
+<pre><code class="shell">$ ayize new pomar
+project 'pomar' created
+$ cd pomar
+$ ayize run            # corre o entry definido no Ayize.toml</code></pre>
+<p data-i18n="project-2"></p>
+<pre><code class="shell">pomar/
+├── Ayize.toml         # manifesto do projecto
+└── src/
+    └── main.az        # entry: fn main()</code></pre>
+<pre><code>[package]
+name = "pomar"
+version = "0.1.0"
+edition = "2026"
+entry = "src/main.az"</code></pre>
+
+<!-- ───────────────────────── VALIDAR ───────────────────────── -->
+<h2 id="validate" data-i18n="h-validate"></h2>
+<p data-i18n="validate-1"></p>
+<pre><code class="shell">$ ayize --version
+ayize 0.1.1
+$ ayize new demo && cd demo && ayize run
+Olá, Ayize!</code></pre>
+<ol data-i18n="validate-list"></ol>
+
+<!-- ───────────────────────── TIPOS ───────────────────────── -->
+<h2 id="types" data-i18n="h-types"></h2>
+<p data-i18n="types-1"></p>
+<div data-i18n="types-table"></div>
+<p data-i18n="types-2"></p>
+<pre><code>// comentário de linha
+/// doc-comment: documenta a declaração seguinte
+let x = 42                 // int (aritmética verificada: overflow → erro)
+let pi = 3.14159           // float
+let ok = true              // bool
+let nome = "Ana"           // string</code></pre>
+
+<!-- ───────────────────────── VARIÁVEIS E OPERADORES ───────────────────────── -->
+<h2 id="vars" data-i18n="h-vars"></h2>
+<p data-i18n="vars-1"></p>
+<pre><code>let x = 10                 // imutável (por omissão)
+let mut total = 0          // mutável
+total = total + x          // ok
+total += x * 2             // atribuição composta:  += -= *= /= %=
+// y = 1                   // ERRO E0426: 'y' não foi declarado</code></pre>
+<p data-i18n="vars-2"></p>
+<pre><code>let pot = 2 ** 10          // 1024   (** = potência)
+let resto = 17 % 5         // 2
+let logico = true && !false        // && || !  (curto-circuito)
+let comp = 3 <= x && x < 100       // == != < > <= >=
+let r = [1,2,3] |> soma            // pipe: r = soma([1,2,3])</code></pre>
+
+<!-- ───────────────────────── STRINGS ───────────────────────── -->
+<h2 id="strings" data-i18n="h-strings"></h2>
+<p data-i18n="strings-1"></p>
+<pre><code>let lang = "Ayize"
+print("olá, ${lang}!")                 // interpolação:  olá, Ayize!
+print("2 + 2 = ${2 + 2}")              // qualquer expressão dentro de ${}
+
+let s = "  Ayize  ".trim().upper()     // "AYIZE"
+print(s.contains("YI"))                // true
+print("a,b,c".split(",").join("-"))    // "a-b-c"
+print("ayize"[0])                      // "a"  (índice por carácter)
+let n = unwrap_or("42".to_int(), 0)    // 42   (to_int/to_float → Result)</code></pre>
+<p data-i18n="strings-2"></p>
+
+<!-- ───────────────────────── COLECÇÕES ───────────────────────── -->
+<h2 id="coll" data-i18n="h-coll"></h2>
+<p data-i18n="coll-1"></p>
+<pre><code>let xs = [10, 20, 30]
+print(xs[1])               // 20
+print(xs[-1])              // 30   (índice negativo conta do fim)
+print(3 in xs)             // false (`in`: pertença em lista/string/mapa)
+xs[0] = 99                 // atribuição por índice
+for x in xs { print(x) }
+
+let par = (1, "um", true)  // tuplo: heterogéneo, tamanho fixo
+let m = { "a": 1, "b": 2 } // mapa: chaves string, ordem preservada
+m["c"] = 3                 // insere
+print(m.keys())            // [a, b, c]   (.values(), .has(k), .get(k))</code></pre>
+<p data-i18n="coll-2"></p>
+<pre><code>let mut acc = []
+for i in 0..5 { acc.push(i * i) }      // [0, 1, 4, 9, 16]
+print(acc.len())                       // 5  (ou len(acc))
+print(acc.contains(9))                 // true
+let top = [5,3,8,1].filter(fn(x) => x > 2).sort().reverse()   // [8, 5, 3]
+print([1,2,3,4].sum())                 // 10</code></pre>
+
+<!-- ───────────────────────── FLUXO ───────────────────────── -->
+<h2 id="flow" data-i18n="h-flow"></h2>
+<p data-i18n="flow-1"></p>
+<pre><code>if n < 0 {
+    print("neg")
+} else if n == 0 {
+    print("zero")
+} else {
+    print("pos")
+}
+
+for x in xs { ... }            // itera uma lista
+for i in 0..n { ... }          // intervalo [0, n)   (0..=n inclui n)
+for (k, v) in mapa { ... }     // destructuring (tuplos, pares, mapas)
+while cond { ... }             // enquanto verdadeiro
+loop { ... break }             // para sempre; sai com break / continue</code></pre>
+<p data-i18n="flow-2"></p>
+<pre><code>match n {
+    0 => print("zero"),
+    1 => print("um"),
+    x => print("outro: ${x}"),     // um nome liga o valor; `_` é curinga
+}
+
+if let v = talvez() {              // desempacota um opcional (?T) com segurança
+    print("tinha ${v}")
+}</code></pre>
+
+<!-- ───────────────────────── FUNÇÕES ───────────────────────── -->
+<h2 id="fn" data-i18n="h-fn"></h2>
+<p data-i18n="fn-1"></p>
+<pre><code>fn soma(a, b) { return a + b }
+
+fn dobro(n: int) -> int { return n * 2 }   // tipos opcionais (graduais)
+// se declara o tipo de retorno, todos os caminhos têm de retornar (E0317)</code></pre>
+<p data-i18n="fn-2"></p>
+
+<!-- ───────────────────────── FUNCIONAL ───────────────────────── -->
+<h2 id="fp" data-i18n="h-fp"></h2>
+<p data-i18n="fp-1"></p>
+<ul data-i18n="fp-list"></ul>
+<p data-i18n="fp-2"></p>
+<pre><code>let base = 100
+let soma = fn(x) => x + base           // closure: captura `base`
+print(soma(5))                          // 105
+
+// ordem superior: funções como argumento e retorno
+fn aplica(f, v) { return f(v) }
+print(aplica(fn(x) => x * x, 7))        // 49
+
+let r = [1, 2, 3, 4, 5, 6]
+    .filter(fn(x) => x % 2 == 0)        // [2, 4, 6]
+    .map(fn(x) => x * x)                // [4, 16, 36]
+    .sum()                              // 56
+print(r)</code></pre>
+<p data-i18n="fp-3"></p>
+<pre><code>// composição com closures: uma função que devolve uma função
+fn vezes(n) { return fn(x) => x * n }
+let triplo = vezes(3)
+print(triplo(10))                       // 30</code></pre>
+
+<!-- ───────────────────────── STRUCTS E CONTRATOS ───────────────────────── -->
+<h2 id="oop" data-i18n="h-oop"></h2>
+<p data-i18n="oop-1"></p>
+<pre><code>type Conta {
+    dono: string
+    saldo: int
+
+    /// Deposita e devolve o novo saldo.
+    fn deposita(self, x) {
+        self.saldo = self.saldo + x
+        return self.saldo
+    }
+}
+
+fn main() {
+    let a = Conta { dono: "Ana", saldo: 100 }
+    print(a.deposita(50))               // 150
+}</code></pre>
+<p data-i18n="oop-2"></p>
+<pre><code>contract Forma {
+    fn area(self) -> float
+}
+
+type Circulo : Forma {                  // `: Forma` faz o compilador verificar
+    r: float
+    fn area(self) -> float { return 3.14159 * self.r * self.r }
+}
+// faltar um método do contrato é erro E0560 (verificado, não em runtime)</code></pre>
+
+<!-- ───────────────────────── GANG OF FOUR ───────────────────────── -->
+<h2 id="gof" data-i18n="h-gof"></h2>
+<p data-i18n="gof-1"></p>
+<h4 class="sub" data-i18n="gof-strat-h"></h4>
+<p data-i18n="gof-strat-p"></p>
+<pre><code>fn aplica_desconto(preco, estrategia) { return estrategia(preco) }
+
+let natal = fn(p) => p * 0.8           // -20%
+let nenhum = fn(p) => p
+
+print(aplica_desconto(100.0, natal))   // 80
+print(aplica_desconto(100.0, nenhum))  // 100</code></pre>
+<h4 class="sub" data-i18n="gof-deco-h"></h4>
+<p data-i18n="gof-deco-p"></p>
+<pre><code>fn com_log(f) {
+    return fn(x) {
+        print("a chamar com ${x}")
+        return f(x)
+    }
+}
+let dobro = fn(x) => x * 2
+let dobro_log = com_log(dobro)
+print(dobro_log(21))                   // imprime o log, depois 42</code></pre>
+<h4 class="sub" data-i18n="gof-obs-h"></h4>
+<p data-i18n="gof-obs-p"></p>
+<pre><code>type Sujeito {
+    obs: list&lt;dyn&gt;
+    fn subscreve(self, f) { self.obs.push(f) }
+    fn notifica(self, ev) { for f in self.obs { f(ev) } }
+}
+
+fn main() {
+    let s = Sujeito { obs: [] }
+    s.subscreve(fn(e) => print("A viu: ${e}"))
+    s.subscreve(fn(e) => print("B viu: ${e}"))
+    s.notifica("evento!")              // os dois observadores reagem
+}</code></pre>
+<h4 class="sub" data-i18n="gof-fact-h"></h4>
+<p data-i18n="gof-fact-p"></p>
+<pre><code>type Circulo : Forma  { r: float  fn area(self) -> float { return 3.14159 * self.r * self.r } }
+type Quadrado : Forma { l: float  fn area(self) -> float { return self.l * self.l } }
+
+fn cria_forma(tipo, tam) {
+    if tipo == "circulo" { return Circulo { r: tam } }
+    return Quadrado { l: tam }
+}
+
+fn main() {
+    let f = cria_forma("circulo", 2.0)
+    print(f.area())                    // 12.566...  (dispatch pelo contrato)
+}</code></pre>
+
+<!-- ───────────────────────── ERROS ───────────────────────── -->
+<h2 id="err" data-i18n="h-err"></h2>
+<p data-i18n="err-1"></p>
+<pre><code>fn parse_porta(s) {
+    let n = s.to_int()?                // se Err, propaga já para o chamador
+    if n < 0 { return Err("porta negativa") }
+    return Ok(n)
+}
+
+fn main() {
+    let r = parse_porta("8080")
+    if is_ok(r) { print("porta = ${unwrap_or(r, 0)}") }
+    else        { print("inválida") }
+}</code></pre>
+<p data-i18n="err-2"></p>
+<pre><code>fn main() {
+    defer print("fecho")               // corre no fim do bloco (LIFO, mesmo em erro)
+    print("trabalho")
+}   // imprime: trabalho, depois fecho</code></pre>
+
+<!-- ───────────────────────── MÓDULOS ───────────────────────── -->
+<h2 id="modules" data-i18n="h-modules"></h2>
+<p data-i18n="modules-1"></p>
+<pre><code>import math
+import json
+
+fn main() {
+    print(math.sqrt(16.0))             // 4
+    let d = json.parse("{\"n\": 1}")?  // parse → Result; `?` desempacota
+    print(d["n"])                      // 1
+}</code></pre>
+<p data-i18n="modules-2"></p>
+<div data-i18n="modules-table"></div>
+
+<!-- ───────────────────────── IA ───────────────────────── -->
+<h2 id="ai" data-i18n="h-ai"></h2>
+<p data-i18n="ai-1"></p>
+<pre><code>import linalg
+
+fn main() {
+    // matrix(linhas, colunas, [valores row-major]) → Result
+    let a = linalg.matrix(2, 2, [1.0, 2.0, 3.0, 4.0])?
+    let b = linalg.matrix(2, 2, [5.0, 6.0, 7.0, 8.0])?
+    let c = a @ b                       // @ = multiplicação de matrizes
+    print(c.to_list())                 // [19, 22, 43, 50]
+}</code></pre>
+<p data-i18n="ai-2"></p>
+<pre><code>import nn
+import linalg
+
+fn main() {
+    let x = nn.param(linalg.matrix(4, 2, [1.0,1.0, 1.0,2.0, 1.0,3.0, 1.0,4.0])?)
+    let t = linalg.matrix(4, 1, [3.0, 5.0, 7.0, 9.0])?    // alvo: y = 2x + 1
+    let w = nn.param(linalg.matrix(2, 1, [0.0, 0.0])?)
+    let opt = nn.sgd([w], 0.02)
+    for step in 0..400 {
+        opt.zero_grad()
+        let loss = nn.mse(nn.matmul(x, w), t)
+        nn.backward(loss)              // autograd reverse-mode
+        opt.step()
+    }
+    print("W ≈ ${w.value().to_list()}")   // ≈ [1, 2]
+}</code></pre>
+
+<!-- ───────────────────────── LLM ───────────────────────── -->
+<h2 id="llm" data-i18n="h-llm"></h2>
+<p data-i18n="llm-1"></p>
+<h3 data-i18n="llm-s1-h"></h3>
+<p data-i18n="llm-s1-p"></p>
+<pre><code>import tokenizer
+
+fn main() {
+    let corpus = "ayize treina llms. ayize treina llms. ayize treina llms."
+    let tok = tokenizer.char(corpus)
+    let ids = tok.encode(corpus)
+    print("vocab = ${tok.vocab_size()}, ${ids.len()} tokens")
+    print("decode = ${tok.decode(tok.encode("ayize"))}")   // round-trip sem perdas
+}</code></pre>
+<h3 data-i18n="llm-s2-h"></h3>
+<p data-i18n="llm-s2-p"></p>
+<pre><code>import gpt
+// gpt.new(vocab, d, block_size, hidden, heads, seed)
+let model = gpt.new(v, 32, ids.len(), 64, 4, 7)</code></pre>
+<div data-i18n="llm-s2-table"></div>
+<h3 data-i18n="llm-s3-h"></h3>
+<p data-i18n="llm-s3-p"></p>
+<pre><code>let r = model.train(ids, 300, 0.02)    // (ids, steps, lr)  → zero-grad·fwd·CE·bwd·Adam
+print("loss ${r["first"]} → ${r["last"]}")   // ~2.7 → perto de 0</code></pre>
+<h3 data-i18n="llm-s4-h"></h3>
+<p data-i18n="llm-s4-p"></p>
+<pre><code>let prompt = tok.encode("ayize ")
+let out = model.generate(prompt, 22, 0.0, 0)   // (prompt, n_novos, temperatura, seed)
+print("gerado = ${tok.decode(out)}")</code></pre>
+<h3 data-i18n="llm-full-h"></h3>
+<p data-i18n="llm-full-p"></p>
+<pre><code>import gpt
+import tokenizer
+
+fn main() {
+    let corpus = "ayize treina llms. ayize treina llms. ayize treina llms."
+    let tok = tokenizer.char(corpus)
+    let v = tok.vocab_size()
+    let ids = tok.encode(corpus)
+
+    let model = gpt.new(v, 32, ids.len(), 64, 4, 7)
+    let r = model.train(ids, 300, 0.02)
+    print("treino: loss ${r["first"]} → ${r["last"]}")
+
+    let out = model.generate(tok.encode("ayize "), 22, 0.0, 0)
+    print("gerado = ${tok.decode(out)}")
+}</code></pre>
+<pre><code class="shell">$ ayize run nanogpt.az
+vocab = 13, 56 tokens
+treino: loss 2.66... → 0.00004...
+gerado = ayize treina llms. ayize tre</code></pre>
+<h3 data-i18n="llm-ft-h"></h3>
+<p data-i18n="llm-ft-p"></p>
+<pre><code>import gpt
+
+fn main() {
+    // classificador: modelo-base + cabeça linear [d → num_classes]
+    let clf = gpt.classifier(4, 16, 3, 32, 2, 2, 7)
+    let exemplos = [([0,2,2], 0), ([0,3,2], 0), ([1,2,2], 1), ([1,3,2], 1)]
+    let r = clf.finetune(exemplos, 400, 0.02)
+    print("exatidão = ${r["accuracy"]}")        // 1
+    print("predict = ${clf.predict([1, 2, 2])}") // 1
+}</code></pre>
+<p class="note" data-i18n="llm-save"></p>
+
+<!-- ───────────────────────── GPU ───────────────────────── -->
+<h2 id="gpu">GPU</h2>
+<p data-i18n="gpu-1"></p>
+<p data-i18n="gpu-2"></p>
+<pre><code class="shell"># NVIDIA (CUDA)
+curl --proto '=https' --tlsv1.2 -sSf \
+  https://raw.githubusercontent.com/angolardevops/ayize-releases/main/install.sh | AYIZE_GPU=cuda sh
+
+# portável (wgpu: Vulkan/Metal/DX)
+curl --proto '=https' --tlsv1.2 -sSf \
+  https://raw.githubusercontent.com/angolardevops/ayize-releases/main/install.sh | AYIZE_GPU=wgpu sh</code></pre>
+<pre><code class="shell">$ ayize run train_gpu.az    # com uma variante GPU, os matmul grandes correm na placa</code></pre>
+
+<!-- ───────────────────────── APÊNDICE A ───────────────────────── -->
+<h2 id="apx-kw" data-i18n="h-apx-kw"></h2>
+<p data-i18n="apx-kw-1"></p>
+<div data-i18n="apx-kw-table"></div>
+
+<!-- ───────────────────────── APÊNDICE B ───────────────────────── -->
+<h2 id="apx-op" data-i18n="h-apx-op"></h2>
+<div data-i18n="apx-op-table"></div>
+
+<!-- ───────────────────────── APÊNDICE C ───────────────────────── -->
+<h2 id="apx-bi" data-i18n="h-apx-bi"></h2>
+<p data-i18n="apx-bi-1"></p>
+<div data-i18n="apx-bi-table"></div>
+<p data-i18n="apx-bi-2"></p>
+
+<footer><span data-i18n="foot"></span></footer>
+</div>
+</main>
+</div>
+
+<script>
+// ── Syntax highlight (sem dependências; corre offline) ──────────────────────
+const KW = /\b(?:fn|let|mut|if|else|for|in|while|loop|match|return|break|continue|import|type|contract|defer|true|false|nil|self|and|or|not)\b/y;
+const TOK = [["comment", /\/\/[^\n]*/y], ["string", /"(?:[^"\\]|\\.)*"/y], ["number", /\b\d+(?:\.\d+)?\b/y], ["kw", KW]];
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function hl(src){
+  let out = "", i = 0;
+  outer: while (i < src.length) {
+    for (const [cls, re] of TOK) {
+      re.lastIndex = i;
+      const m = re.exec(src);
+      if (m && m.index === i) { out += '<span class="t-' + cls + '">' + esc(m[0]) + "</span>"; i = re.lastIndex; continue outer; }
+    }
+    out += esc(src[i]); i++;
+  }
+  return out;
+}
+function highlightAll(){
+  document.querySelectorAll("pre code").forEach(c => {
+    if (c.dataset.hl) return; c.dataset.hl = "1";
+    if (c.classList.contains("shell"))
+      c.innerHTML = esc(c.textContent).replace(/^(\$ .*)$/gm, '<span class="t-shell">$1</span>');
+    else
+      c.innerHTML = hl(c.textContent);
+  });
+}
+
+// ── Conteúdo (3 idiomas). pt-PT é a fonte; pt-BR/EN preenchidos abaixo. ──────
+const PT = {
+"toc-basics":"Básico","toc-lang":"Linguagem","toc-para":"Paradigmas","toc-adv":"Avançado","toc-ref":"Referência",
+"nav-intro":"O que é o Ayize","nav-compare":"Comparação","nav-install":"Instalação","nav-start":"Primeiros passos",
+"nav-project":"Criar um projecto","nav-types":"Valores e tipos","nav-vars":"Variáveis e operadores","nav-strings":"Strings",
+"nav-coll":"Colecções","nav-flow":"Controlo de fluxo","nav-fn":"Funções","nav-fp":"Programação funcional",
+"nav-oop":"Structs e contratos","nav-gof":"Padrões (GoF)","nav-err":"Erros e defer","nav-modules":"Módulos e stdlib",
+"nav-ai":"Tensores e IA","nav-llm":"Construir um LLM","nav-apx-kw":"Apêndice A · keywords",
+"nav-apx-op":"Apêndice B · operadores","nav-apx-bi":"Apêndice C · builtins",
+"tagline":"Uma linguagem de programação <em>LLM-native</em> (<code>.az</code>): legível, segura e determinística, com bateria de IA incluída e treino na GPU.",
+"pill-deps":"zero dependências",
+"install-lbl":"Instala numa linha (binário pronto a usar, não precisas de mais nada):",
+"nav-validate":"Validar a instalação",
+"h-validate":"Validar a instalação",
+"validate-1":"Depois de instalares, corre estes passos para confirmar que está tudo a funcionar:",
+"validate-list":"<li>Versão: <code>ayize --version</code> deve mostrar <code>ayize 0.1.1</code>.</li><li>Programa: <code>ayize new demo &amp;&amp; cd demo &amp;&amp; ayize run</code> deve imprimir <code>Olá, Ayize!</code>.</li><li>Treino: cria um ficheiro com o exemplo de <a href=\"#ai\">regressão linear</a> e corre-o — deve dar <code>W ≈ [1, 2]</code>.</li><li>LLM: corre o <a href=\"#llm\">programa completo do nanoGPT</a> — a loss cai para perto de zero e gera texto.</li><li>GPU (variante CUDA/wgpu): instala com <code>AYIZE_GPU</code>; os <code>matmul</code> grandes passam a correr na placa (a loss desce na mesma).</li>",
+
+"h-intro":"O que é o Ayize",
+"intro-1":"O <strong>Ayize</strong> é uma linguagem de programação de propósito geral pensada para a era dos modelos de linguagem. Os programas vivem em ficheiros <code>.az</code> e correm com um único comando: <code>ayize run</code>. A sintaxe é deliberadamente simples e legível — para humanos <em>e</em> para LLMs — e a biblioteca padrão traz, de origem, o que é preciso para construir e treinar redes neuronais: tensores, autograd, atenção, transformers e otimizadores.",
+"h-intro-obj":"Objectivo",
+"intro-obj":"Tornar trivial escrever programas correctos que <em>também</em> sabem fazer IA. Em vez de colar dezenas de bibliotecas, tens uma linguagem pequena e previsível onde treinar um modelo é tão natural como abrir um ficheiro. O foco é a clareza e o determinismo: o mesmo programa dá o mesmo resultado, e os erros apontam sempre a causa.",
+"h-intro-focus":"Em que se foca",
+"intro-focus":"<li><strong>Erros como valores</strong> — sem excepções nem <code>null</code> solto; um <code>Result</code> obriga a tratar a falha.</li><li><strong>Determinismo</strong> — sementes explícitas, ordem de inserção preservada nos mapas, aritmética inteira verificada.</li><li><strong>IA incluída</strong> — autograd reverse-mode, transformer e otimizadores na stdlib (validados por <em>gradient checking</em>).</li><li><strong>Tipagem gradual</strong> — anotas tipos quando queres mais garantias; o resto corre como código dinâmico.</li><li><strong>Acelerável</strong> — um JIT para o subconjunto numérico e dois backends de GPU (CUDA e wgpu).</li><li><strong>Portável</strong> — um único binário, sem dependências externas para instalar.</li>",
+
+"h-compare":"Comparação com Python, Go e Rust",
+"compare-1":"Cada linguagem tem o seu lugar. O Ayize procura o equilíbrio entre a leveza do Python, a simplicidade do Go e a segurança do Rust — com a IA já dentro da linguagem. A tabela é um guia honesto, não um ranking:",
+"compare-table":"<table><tr><th> </th><th>Python</th><th>Go</th><th>Rust</th><th>Ayize</th></tr><tr><td>Leitura/curva</td><td>muito suave</td><td>suave</td><td>exigente</td><td>suave</td></tr><tr><td>Modelo de erros</td><td>excepções</td><td>valores (<code>err</code>)</td><td><code>Result</code> + <code>?</code></td><td><code>Result</code> + <code>?</code></td></tr><tr><td>Tipagem</td><td>dinâmica</td><td>estática</td><td>estática forte</td><td>gradual</td></tr><tr><td>IA na stdlib</td><td>via bibliotecas</td><td>não</td><td>via crates</td><td>incluída</td></tr><tr><td>Treino na GPU</td><td>bibliotecas</td><td>—</td><td>crates</td><td>incluído</td></tr><tr><td>Distribuição</td><td>interpretador+pacotes</td><td>binário único</td><td>binário único</td><td>binário único</td></tr></table>",
+"compare-note":"Não é uma questão de “melhor”: o Rust dá garantias de memória e desempenho que o Ayize não tenta replicar; o Python tem um ecossistema imenso; o Go brilha em serviços concorrentes. O Ayize oferece um caminho mais curto entre uma ideia e um modelo treinado, mantendo erros explícitos e um único binário.",
+
+"h-install":"Instalação",
+"install-1":"Instala o binário pré-compilado com uma linha — não precisas de compilador nem de nenhum outro programa. Depois confirma:",
+"install-2":"O instalador coloca o <code>ayize</code> em <code>~/.ayize/bin</code>. Toda esta documentação usa apenas o comando <code>ayize</code>.",
+
+"h-start":"Primeiros passos",
+"start-1":"A execução começa em <code>fn main()</code>. <code>print</code> está sempre disponível (é um <em>builtin</em>, sem <code>import</code>). Cria <code>hello.az</code>:",
+"start-2":"A <em>toolchain</em> tem tudo o que precisas, num só comando <code>ayize</code>:",
+"start-cmds":"<table><tr><th>Comando</th><th>O que faz</th></tr><tr><td><code>ayize run [ficheiro]</code></td><td>corre um programa (ou o entry do projecto)</td></tr><tr><td><code>ayize new &lt;nome&gt;</code></td><td>cria um projecto novo</td></tr><tr><td><code>ayize check</code></td><td>analisa sem executar (erros, tipos)</td></tr><tr><td><code>ayize fmt [--check]</code></td><td>formata o código</td></tr><tr><td><code>ayize test</code></td><td>corre as funções <code>test_*</code></td></tr><tr><td><code>ayize serve doc</code></td><td>abre esta documentação</td></tr></table>",
+
+"h-project":"Criar um projecto",
+"project-1":"<code>ayize new</code> gera a estrutura mínima de um projecto. Entras na pasta e corres com <code>ayize run</code> (sem argumento, usa o <em>entry</em> do manifesto):",
+"project-2":"A estrutura gerada:",
+
+"h-types":"Valores e tipos",
+"types-1":"O Ayize tem um conjunto pequeno de tipos. Tudo o resto compõe-se a partir destes:",
+"types-table":"<table><tr><th>Tipo</th><th>Exemplos</th><th>Notas</th></tr><tr><td><code>int</code></td><td><code>42</code>, <code>-7</code></td><td>inteiro de 64 bits, aritmética verificada (overflow → erro)</td></tr><tr><td><code>float</code></td><td><code>3.14</code></td><td>vírgula flutuante de 64 bits</td></tr><tr><td><code>bool</code></td><td><code>true</code>, <code>false</code></td><td> </td></tr><tr><td><code>string</code></td><td><code>\"olá\"</code></td><td>interpolação <code>${...}</code> e escapes <code>\\n \\t</code></td></tr><tr><td><code>nil</code></td><td><code>nil</code></td><td>opcional ausente (<code>?T</code>); só via <code>if let</code></td></tr><tr><td>lista</td><td><code>[1, 2, 3]</code></td><td>homogénea, indexável, iterável</td></tr><tr><td>tuplo</td><td><code>(1, \"a\", true)</code></td><td>heterogéneo, tamanho fixo</td></tr><tr><td>mapa</td><td><code>{ \"k\": 1 }</code></td><td>chaves string, ordem de inserção preservada</td></tr><tr><td><code>type</code></td><td><code>Conta { ... }</code></td><td>struct com campos e métodos</td></tr></table>",
+"types-2":"Os comentários são <code>//</code> (linha) e <code>///</code> (doc-comment, documenta a declaração seguinte):",
+
+"h-vars":"Variáveis e operadores",
+"vars-1":"<code>let</code> declara (imutável por omissão); <code>let mut</code> permite reatribuir. Reatribuir um nome não declarado é um <strong>erro</strong> (E0426), não um descuido silencioso.",
+"vars-2":"Os operadores cobrem o habitual, mais potência (<code>**</code>), <em>pipe</em> (<code>|></code>) e o operador de tensores (<code>@</code>). A lista completa está no <a href=\"#apx-op\">Apêndice B</a>.",
+
+"h-strings":"Strings e interpolação",
+"strings-1":"As strings suportam interpolação com <code>${expr}</code> (qualquer expressão), além de um conjunto rico de métodos:",
+"strings-2":"Métodos: <code>upper</code>/<code>lower</code>/<code>trim</code>, <code>contains</code>/<code>starts_with</code>/<code>ends_with</code>, <code>replace</code>, <code>split</code>, <code>chars</code>, <code>repeat</code>, <code>slice</code>, <code>index_of</code>, e <code>to_int</code>/<code>to_float</code> (devolvem <code>Result</code> — parse seguro).",
+
+"h-coll":"Colecções",
+"coll-1":"Listas, tuplos e mapas. A indexação aceita índices negativos (do fim) e o operador <code>in</code> testa pertença:",
+"coll-2":"As listas têm métodos que mutam (<code>push</code>/<code>pop</code>) e transformadores que devolvem uma <strong>nova</strong> lista (encadeáveis): <code>map</code>, <code>filter</code>, <code>sort</code>, <code>reverse</code>, <code>index_of</code>, <code>sum</code>, <code>join</code>, <code>contains</code>, <code>get</code>.",
+
+"h-flow":"Controlo de fluxo",
+"flow-1":"As estruturas habituais. <code>break</code>/<code>continue</code> só funcionam dentro de ciclos:",
+"flow-2":"<code>match</code> despacha pelo valor (literais, um nome que liga o valor, ou <code>_</code> curinga; sem braço a casar é erro). <code>if let</code> é a forma segura de usar um opcional:",
+
+"h-fn":"Funções",
+"fn-1":"As funções declaram-se com <code>fn</code>. As anotações de tipo são opcionais (tipagem gradual):",
+"fn-2":"As funções anónimas (<em>closures</em>) têm a forma concisa <code>fn(x) => expr</code> ou com bloco <code>fn(x) { ... }</code> — ver a secção seguinte.",
+
+"h-fp":"Programação funcional",
+"fp-1":"O Ayize trata funções como valores de primeira classe. Isso dá-te um estilo funcional limpo:",
+"fp-list":"<li><strong>Imutável por omissão</strong> — <code>let</code> não muda; opta por <code>mut</code> quando precisas.</li><li><strong>Closures</strong> — uma função captura o ambiente onde nasce.</li><li><strong>Ordem superior</strong> — passa, devolve e guarda funções.</li><li><strong>Encadeamento</strong> — <code>map</code>/<code>filter</code>/<code>sort</code> compõem-se; <code>|></code> liga passos.</li>",
+"fp-2":"Exemplos:",
+"fp-3":"Como as closures capturam o ambiente, uma função pode fabricar outras funções especializadas:",
+
+"h-oop":"Structs e contratos",
+"oop-1":"Um <code>type</code> agrupa campos e métodos. O primeiro parâmetro <code>self</code> dá acesso à instância:",
+"oop-2":"Um <code>contract</code> é uma interface estrutural (estilo Go). Anotar <code>: Forma</code> pede ao compilador para <strong>verificar</strong> a conformância — se faltar um método, é erro em análise, não em runtime:",
+
+"h-gof":"Padrões de projecto (Gang of Four)",
+"gof-1":"Com closures e contratos, os padrões clássicos do <em>Gang of Four</em> ficam curtos e directos. Quatro exemplos:",
+"gof-strat-h":"Strategy — o algoritmo é um parâmetro",
+"gof-strat-p":"Em vez de uma hierarquia de classes, passa-se a estratégia como uma closure:",
+"gof-deco-h":"Decorator — embrulhar comportamento",
+"gof-deco-p":"Uma função que recebe outra e devolve uma versão enriquecida (aqui, com registo):",
+"gof-obs-h":"Observer — notificar subscritores",
+"gof-obs-p":"O sujeito guarda uma lista de closures e chama-as quando algo acontece:",
+"gof-fact-h":"Factory — escolher o tipo concreto",
+"gof-fact-p":"Uma função decide que <code>type</code> criar; quem chama só usa o contrato comum (<code>Forma</code> do exemplo anterior):",
+
+"h-err":"Erros como valores e <code>defer</code>",
+"err-1":"Não há excepções. Um <code>Result</code> é <code>Ok(v)</code> ou <code>Err(e)</code>; o operador sufixo <code>?</code> desempacota o <code>Ok</code> ou propaga o <code>Err</code>. Os builtins de erro são <code>Ok</code>, <code>Err</code>, <code>is_ok</code>, <code>is_err</code>, <code>unwrap_or</code> e <code>assert</code>:",
+"err-2":"<code>defer</code> adia uma expressão para o fim do bloco (ordem LIFO; corre mesmo em caso de erro) — ideal para fechar recursos:",
+
+"h-modules":"Módulos e biblioteca padrão",
+"modules-1":"<code>import nome</code> traz um módulo da stdlib (ou um ficheiro local <code>nome.az</code>); usa-se por <code>nome.funcao(...)</code>:",
+"modules-2":"Os módulos disponíveis e as suas funções principais:",
+"modules-table":"<table><tr><th>Módulo</th><th>Funções</th></tr><tr><td><code>math</code></td><td>sqrt, exp, ln, log10, sin, cos, tan, floor, ceil, round, abs, pow, min, max</td></tr><tr><td><code>linalg</code></td><td>matrix, vector, zeros, randn, num_threads</td></tr><tr><td><code>nn</code></td><td>param, matmul, add, add_bias, relu, gelu, softmax_rows, mse, cross_entropy, backward, sgd, adam</td></tr><tr><td><code>gpt</code></td><td>new, classifier</td></tr><tr><td><code>tokenizer</code></td><td>char, bpe</td></tr><tr><td><code>json</code></td><td>parse, to_string, jq</td></tr><tr><td><code>csv</code></td><td>parse, parse_with_header, write</td></tr><tr><td><code>fs</code></td><td>exists, is_dir, is_file, size, read_dir, create_dir_all, remove_file, remove_dir_all, walk</td></tr><tr><td><code>io</code></td><td>read_to_string, write, read_lines</td></tr><tr><td><code>os</code></td><td>env, set_env, vars, args, cwd, exec</td></tr><tr><td><code>path</code></td><td>join, parent, basename, ext, stem, is_absolute</td></tr><tr><td><code>time</code></td><td>Duration, Stopwatch, Instant</td></tr><tr><td><code>regex</code></td><td>new → is_match, find, replace_all</td></tr><tr><td><code>random</code></td><td>Rng → uniform, normal, range, shuffle</td></tr><tr><td><code>crypto</code></td><td>rand_bytes, rand_u64, rand_below, token_hex</td></tr><tr><td><code>hash</code></td><td>sha256_hex, sha256</td></tr><tr><td><code>http</code></td><td>get, post, dispatch, serve</td></tr><tr><td><code>log</code></td><td>info, warn, error</td></tr></table>",
+
+"h-ai":"Tensores e IA",
+"ai-1":"O operador <code>@</code> é multiplicação de matrizes; o módulo <code>linalg</code> cria e manipula tensores. Com formas anotadas, a compatibilidade é verificada em análise (shape mismatch → erro):",
+"ai-2":"Para treinar, o módulo <code>nn</code> dá parâmetros com gradiente, operações diferenciáveis e otimizadores. O autograd é reverse-mode (grafo + <code>backward</code>). Eis uma regressão linear completa — corre com <code>ayize run</code>:",
+
+"h-llm":"Construir um LLM passo a passo",
+"llm-1":"Um percurso <em>aprender-fazendo</em> ao estilo de Sebastian Raschka (<em>Build a Large Language Model From Scratch</em>): vais treinar um GPT real e gerar texto, tudo em <code>.az</code>. Os internos do transformer (atenção causal multi-head, LayerNorm, GELU, cross-entropy, autograd) são a stdlib; aqui compões e treinas.",
+"llm-s1-h":"Passo 1 — Dados: do texto a tokens",
+"llm-s1-p":"Um LLM não vê texto, vê <em>ids</em>. O <code>tokenizer</code> constrói um vocabulário ao nível do carácter e converte nos dois sentidos sem perdas:",
+"llm-s2-h":"Passo 2 — O modelo: um GPT",
+"llm-s2-p":"<code>gpt.new</code> constrói um GPT-2 <em>pre-norm</em> completo: embeddings de token e posicionais, blocos transformer (atenção + MLP com GELU + residuais), LayerNorm e a <em>head</em> de saída.",
+"llm-s2-table":"<table><tr><th>Parâmetro</th><th>Significado</th></tr><tr><td><code>vocab</code></td><td>tamanho do vocabulário (do tokenizer)</td></tr><tr><td><code>d</code></td><td>dimensão dos embeddings</td></tr><tr><td><code>block_size</code></td><td>contexto máximo</td></tr><tr><td><code>hidden</code></td><td>largura do MLP</td></tr><tr><td><code>heads</code></td><td>número de cabeças de atenção</td></tr><tr><td><code>seed</code></td><td>semente determinística (mesma seed → mesmos pesos)</td></tr></table>",
+"llm-s3-h":"Passo 3 — Pré-treino",
+"llm-s3-p":"<code>model.train</code> corre o training loop real (zero-grad → forward → cross-entropy → backward → passo de Adam) e devolve a loss inicial e final. A loss a cair para perto de zero indica que o modelo memorizou o padrão:",
+"llm-s4-h":"Passo 4 — Geração",
+"llm-s4-p":"Gera autoregressivamente a partir de um prompt. <code>temperatura = 0</code> é guloso (determinístico); valores maiores trazem variedade:",
+"llm-full-h":"Programa completo",
+"llm-full-p":"Junta tudo — treina ~300 passos (poucos segundos) e gera texto:",
+"llm-ft-h":"Finetuning — classificação",
+"llm-ft-p":"<code>gpt.classifier</code> é o modelo-base mais uma cabeça linear. <code>.finetune</code> treina a representação do último token a prever o rótulo e devolve também a exatidão:",
+"llm-save":"Para guardar e recarregar pesos usa-se <code>model.save(\"m.safetensors\")</code> e <code>model.load(...)</code> (formato safetensors, o mesmo da Hugging Face). Um mismatch de forma dá erro limpo, nunca corrupção silenciosa.",
+
+"gpu-1":"Os <code>matmul</code> grandes despacham para a GPU automaticamente — o <em>forward</em> e o <em>backward</em> correm residentes no dispositivo (sem cópias por operação), em dois backends: CUDA nativo (NVIDIA) e wgpu portável (Vulkan/Metal/DX). Basta correr o programa com uma variante GPU:",
+"gpu-2":"Para obteres uma variante com GPU não precisas de compilar nada — instala-a com a variável <code>AYIZE_GPU</code> (Linux x86_64):",
+
+"h-apx-kw":"Apêndice A — Palavras-chave e statements",
+"apx-kw-1":"As palavras-chave activas da linguagem e o que cada uma faz:",
+"apx-kw-table":"<table><tr><th>Keyword</th><th>O que faz</th></tr><tr><td><code>fn</code></td><td>declara uma função (ou closure: <code>fn(x) => ...</code>)</td></tr><tr><td><code>let</code></td><td>declara uma variável (imutável)</td></tr><tr><td><code>mut</code></td><td>com <code>let</code>, torna a variável mutável</td></tr><tr><td><code>type</code></td><td>declara um struct (campos + métodos)</td></tr><tr><td><code>contract</code></td><td>declara uma interface estrutural</td></tr><tr><td><code>import</code></td><td>importa um módulo da stdlib ou ficheiro local</td></tr><tr><td><code>return</code></td><td>devolve um valor da função</td></tr><tr><td><code>if</code> / <code>else</code></td><td>execução condicional</td></tr><tr><td><code>match</code></td><td>despacha pelo valor (com <code>=></code> e <code>_</code>)</td></tr><tr><td><code>for</code> ... <code>in</code></td><td>itera lista, intervalo, mapa</td></tr><tr><td><code>while</code></td><td>repete enquanto a condição é verdadeira</td></tr><tr><td><code>loop</code></td><td>repete para sempre (sai com <code>break</code>)</td></tr><tr><td><code>break</code> / <code>continue</code></td><td>sai do ciclo / salta para a próxima iteração</td></tr><tr><td><code>defer</code></td><td>adia uma expressão para o fim do bloco (LIFO)</td></tr><tr><td><code>true</code> / <code>false</code></td><td>literais booleanos</td></tr><tr><td><code>nil</code></td><td>opcional ausente (usado via <code>if let</code>)</td></tr><tr><td><code>self</code></td><td>a instância, dentro de um método</td></tr></table>",
+
+"h-apx-op":"Apêndice B — Operadores",
+"apx-op-table":"<table><tr><th>Grupo</th><th>Operadores</th><th>Notas</th></tr><tr><td>aritméticos</td><td><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>**</code></td><td><code>%</code> resto, <code>**</code> potência; inteiros verificam overflow</td></tr><tr><td>comparação</td><td><code>==</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code></td><td> </td></tr><tr><td>lógicos</td><td><code>&amp;&amp;</code> <code>||</code> <code>!</code></td><td><code>&amp;&amp;</code> e <code>||</code> fazem curto-circuito</td></tr><tr><td>atribuição</td><td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code></td><td>composta: <code>x += e</code> ≡ <code>x = x + e</code></td></tr><tr><td>intervalo</td><td><code>..</code> <code>..=</code></td><td><code>a..b</code> exclui b; <code>a..=b</code> inclui b</td></tr><tr><td>pertença</td><td><code>in</code></td><td>lista, string ou mapa</td></tr><tr><td>pipe</td><td><code>|></code></td><td><code>x |> f</code> ≡ <code>f(x)</code></td></tr><tr><td>tensor</td><td><code>@</code></td><td>multiplicação de matrizes</td></tr><tr><td>propagação</td><td><code>?</code></td><td>sufixo, sobre <code>Result</code></td></tr><tr><td>acesso</td><td><code>.</code> <code>[]</code> <code>()</code></td><td>membro, índice, chamada</td></tr></table>",
+
+"h-apx-bi":"Apêndice C — Builtins nativos",
+"apx-bi-1":"Estas funções estão sempre disponíveis, sem <code>import</code>:",
+"apx-bi-table":"<table><tr><th>Builtin</th><th>O que faz</th></tr><tr><td><code>print(x, ...)</code></td><td>escreve no stdout (qualquer valor)</td></tr><tr><td><code>len(x)</code></td><td>tamanho de lista, string, tuplo ou mapa</td></tr><tr><td><code>Ok(v)</code></td><td>constrói um <code>Result</code> de sucesso</td></tr><tr><td><code>Err(e)</code></td><td>constrói um <code>Result</code> de erro</td></tr><tr><td><code>is_ok(r)</code></td><td><code>true</code> se o <code>Result</code> é <code>Ok</code></td></tr><tr><td><code>is_err(r)</code></td><td><code>true</code> se o <code>Result</code> é <code>Err</code></td></tr><tr><td><code>unwrap_or(r, d)</code></td><td>o valor do <code>Ok</code>, ou <code>d</code> se for <code>Err</code></td></tr><tr><td><code>assert(c, msg)</code></td><td>falha o programa/teste se <code>c</code> for falso</td></tr></table>",
+"apx-bi-2":"Para além destes, os valores têm métodos (ex.: <code>lista.push</code>, <code>string.upper</code>, <code>mapa.keys</code>) descritos nas secções de Colecções e Strings.",
+
+"foot":"Código em <a href=\"https://github.com/angolardevops/ayize\">angolardevops/ayize</a> · referência em <code>docs/LANGUAGE.md</code> · esta página vem de <code>ayize serve doc</code>."
+};
+const BR = {
+"toc-basics":"Básico","toc-lang":"Linguagem","toc-para":"Paradigmas","toc-adv":"Avançado","toc-ref":"Referência",
+"nav-intro":"O que é o Ayize","nav-compare":"Comparação","nav-install":"Instalação","nav-start":"Primeiros passos",
+"nav-project":"Criar um projeto","nav-types":"Valores e tipos","nav-vars":"Variáveis e operadores","nav-strings":"Strings",
+"nav-coll":"Coleções","nav-flow":"Controle de fluxo","nav-fn":"Funções","nav-fp":"Programação funcional",
+"nav-oop":"Structs e contratos","nav-gof":"Padrões (GoF)","nav-err":"Erros e defer","nav-modules":"Módulos e stdlib",
+"nav-ai":"Tensores e IA","nav-llm":"Construir um LLM","nav-apx-kw":"Apêndice A · keywords",
+"nav-apx-op":"Apêndice B · operadores","nav-apx-bi":"Apêndice C · builtins",
+"tagline":"Uma linguagem de programação <em>LLM-native</em> (<code>.az</code>): legível, segura e determinística, com bateria de IA incluída e treinamento na GPU.",
+"pill-deps":"zero dependências",
+"install-lbl":"Instala em uma linha (binário pronto para usar, você não precisa de mais nada):",
+"nav-validate":"Validar a instalação",
+"h-validate":"Validar a instalação",
+"validate-1":"Depois de instalar, rode estes passos para confirmar que está tudo funcionando:",
+"validate-list":"<li>Versão: <code>ayize --version</code> deve mostrar <code>ayize 0.1.1</code>.</li><li>Programa: <code>ayize new demo &amp;&amp; cd demo &amp;&amp; ayize run</code> deve imprimir <code>Olá, Ayize!</code>.</li><li>Treinamento: crie um arquivo com o exemplo de <a href=\"#ai\">regressão linear</a> e rode-o — deve dar <code>W ≈ [1, 2]</code>.</li><li>LLM: rode o <a href=\"#llm\">programa completo do nanoGPT</a> — a loss cai para perto de zero e gera texto.</li><li>GPU (variante CUDA/wgpu): instale com <code>AYIZE_GPU</code>; os <code>matmul</code> grandes passam a rodar na placa (a loss desce do mesmo jeito).</li>",
+
+"h-intro":"O que é o Ayize",
+"intro-1":"O <strong>Ayize</strong> é uma linguagem de programação de propósito geral pensada para a era dos modelos de linguagem. Os programas vivem em arquivos <code>.az</code> e rodam com um único comando: <code>ayize run</code>. A sintaxe é deliberadamente simples e legível — para humanos <em>e</em> para LLMs — e a biblioteca padrão traz, de fábrica, o que é preciso para construir e treinar redes neurais: tensores, autograd, atenção, transformers e otimizadores.",
+"h-intro-obj":"Objetivo",
+"intro-obj":"Tornar trivial escrever programas corretos que <em>também</em> sabem fazer IA. Em vez de colar dezenas de bibliotecas, você tem uma linguagem pequena e previsível onde treinar um modelo é tão natural quanto abrir um arquivo. O foco é a clareza e o determinismo: o mesmo programa dá o mesmo resultado, e os erros apontam sempre a causa.",
+"h-intro-focus":"Em que se foca",
+"intro-focus":"<li><strong>Erros como valores</strong> — sem exceções nem <code>null</code> solto; um <code>Result</code> obriga a tratar a falha.</li><li><strong>Determinismo</strong> — seeds explícitas, ordem de inserção preservada nos mapas, aritmética inteira verificada.</li><li><strong>IA incluída</strong> — autograd reverse-mode, transformer e otimizadores na stdlib (validados por <em>gradient checking</em>).</li><li><strong>Tipagem gradual</strong> — você anota tipos quando quer mais garantias; o resto roda como código dinâmico.</li><li><strong>Acelerável</strong> — um JIT para o subconjunto numérico e dois backends de GPU (CUDA e wgpu).</li><li><strong>Portável</strong> — um único binário, sem dependências externas para instalar.</li>",
+
+"h-compare":"Comparação com Python, Go e Rust",
+"compare-1":"Cada linguagem tem o seu lugar. O Ayize procura o equilíbrio entre a leveza do Python, a simplicidade do Go e a segurança do Rust — com a IA já dentro da linguagem. A tabela é um guia honesto, não um ranking:",
+"compare-table":"<table><tr><th> </th><th>Python</th><th>Go</th><th>Rust</th><th>Ayize</th></tr><tr><td>Leitura/curva</td><td>muito suave</td><td>suave</td><td>exigente</td><td>suave</td></tr><tr><td>Modelo de erros</td><td>exceções</td><td>valores (<code>err</code>)</td><td><code>Result</code> + <code>?</code></td><td><code>Result</code> + <code>?</code></td></tr><tr><td>Tipagem</td><td>dinâmica</td><td>estática</td><td>estática forte</td><td>gradual</td></tr><tr><td>IA na stdlib</td><td>via bibliotecas</td><td>não</td><td>via crates</td><td>incluída</td></tr><tr><td>Treinamento na GPU</td><td>bibliotecas</td><td>—</td><td>crates</td><td>incluído</td></tr><tr><td>Distribuição</td><td>interpretador+pacotes</td><td>binário único</td><td>binário único</td><td>binário único</td></tr></table>",
+"compare-note":"Não é uma questão de “melhor”: o Rust dá garantias de memória e desempenho que o Ayize não tenta replicar; o Python tem um ecossistema imenso; o Go brilha em serviços concorrentes. O Ayize oferece um caminho mais curto entre uma ideia e um modelo treinado, mantendo erros explícitos e um único binário.",
+
+"h-install":"Instalação",
+"install-1":"Instala o binário pré-compilado com uma linha — você não precisa de compilador nem de nenhum outro programa. Depois confirme:",
+"install-2":"O instalador coloca o <code>ayize</code> em <code>~/.ayize/bin</code>. Toda esta documentação usa apenas o comando <code>ayize</code>.",
+
+"h-start":"Primeiros passos",
+"start-1":"A execução começa em <code>fn main()</code>. <code>print</code> está sempre disponível (é um <em>builtin</em>, sem <code>import</code>). Crie <code>hello.az</code>:",
+"start-2":"A <em>toolchain</em> tem tudo o que você precisa, em um só comando <code>ayize</code>:",
+"start-cmds":"<table><tr><th>Comando</th><th>O que faz</th></tr><tr><td><code>ayize run [arquivo]</code></td><td>roda um programa (ou o entry do projeto)</td></tr><tr><td><code>ayize new &lt;nome&gt;</code></td><td>cria um projeto novo</td></tr><tr><td><code>ayize check</code></td><td>analisa sem executar (erros, tipos)</td></tr><tr><td><code>ayize fmt [--check]</code></td><td>formata o código</td></tr><tr><td><code>ayize test</code></td><td>roda as funções <code>test_*</code></td></tr><tr><td><code>ayize serve doc</code></td><td>abre esta documentação</td></tr></table>",
+
+"h-project":"Criar um projeto",
+"project-1":"<code>ayize new</code> gera a estrutura mínima de um projeto. Você entra na pasta e roda com <code>ayize run</code> (sem argumento, usa o <em>entry</em> do manifesto):",
+"project-2":"A estrutura gerada:",
+
+"h-types":"Valores e tipos",
+"types-1":"O Ayize tem um conjunto pequeno de tipos. Todo o resto se compõe a partir destes:",
+"types-table":"<table><tr><th>Tipo</th><th>Exemplos</th><th>Notas</th></tr><tr><td><code>int</code></td><td><code>42</code>, <code>-7</code></td><td>inteiro de 64 bits, aritmética verificada (overflow → erro)</td></tr><tr><td><code>float</code></td><td><code>3.14</code></td><td>ponto flutuante de 64 bits</td></tr><tr><td><code>bool</code></td><td><code>true</code>, <code>false</code></td><td> </td></tr><tr><td><code>string</code></td><td><code>\"olá\"</code></td><td>interpolação <code>${...}</code> e escapes <code>\\n \\t</code></td></tr><tr><td><code>nil</code></td><td><code>nil</code></td><td>opcional ausente (<code>?T</code>); só via <code>if let</code></td></tr><tr><td>lista</td><td><code>[1, 2, 3]</code></td><td>homogênea, indexável, iterável</td></tr><tr><td>tupla</td><td><code>(1, \"a\", true)</code></td><td>heterogênea, tamanho fixo</td></tr><tr><td>mapa</td><td><code>{ \"k\": 1 }</code></td><td>chaves string, ordem de inserção preservada</td></tr><tr><td><code>type</code></td><td><code>Conta { ... }</code></td><td>struct com campos e métodos</td></tr></table>",
+"types-2":"Os comentários são <code>//</code> (linha) e <code>///</code> (doc-comment, documenta a declaração seguinte):",
+
+"h-vars":"Variáveis e operadores",
+"vars-1":"<code>let</code> declara (imutável por padrão); <code>let mut</code> permite reatribuir. Reatribuir um nome não declarado é um <strong>erro</strong> (E0426), não um descuido silencioso.",
+"vars-2":"Os operadores cobrem o habitual, mais potência (<code>**</code>), <em>pipe</em> (<code>|></code>) e o operador de tensores (<code>@</code>). A lista completa está no <a href=\"#apx-op\">Apêndice B</a>.",
+
+"h-strings":"Strings e interpolação",
+"strings-1":"As strings suportam interpolação com <code>${expr}</code> (qualquer expressão), além de um conjunto rico de métodos:",
+"strings-2":"Métodos: <code>upper</code>/<code>lower</code>/<code>trim</code>, <code>contains</code>/<code>starts_with</code>/<code>ends_with</code>, <code>replace</code>, <code>split</code>, <code>chars</code>, <code>repeat</code>, <code>slice</code>, <code>index_of</code>, e <code>to_int</code>/<code>to_float</code> (retornam <code>Result</code> — parse seguro).",
+
+"h-coll":"Coleções",
+"coll-1":"Listas, tuplas e mapas. A indexação aceita índices negativos (do fim) e o operador <code>in</code> testa pertencimento:",
+"coll-2":"As listas têm métodos que mutam (<code>push</code>/<code>pop</code>) e transformadores que retornam uma <strong>nova</strong> lista (encadeáveis): <code>map</code>, <code>filter</code>, <code>sort</code>, <code>reverse</code>, <code>index_of</code>, <code>sum</code>, <code>join</code>, <code>contains</code>, <code>get</code>.",
+
+"h-flow":"Controle de fluxo",
+"flow-1":"As estruturas habituais. <code>break</code>/<code>continue</code> só funcionam dentro de laços:",
+"flow-2":"<code>match</code> despacha pelo valor (literais, um nome que liga o valor, ou <code>_</code> curinga; sem braço que case é erro). <code>if let</code> é a forma segura de usar um opcional:",
+
+"h-fn":"Funções",
+"fn-1":"As funções se declaram com <code>fn</code>. As anotações de tipo são opcionais (tipagem gradual):",
+"fn-2":"As funções anônimas (<em>closures</em>) têm a forma concisa <code>fn(x) => expr</code> ou com bloco <code>fn(x) { ... }</code> — veja a seção seguinte.",
+
+"h-fp":"Programação funcional",
+"fp-1":"O Ayize trata funções como valores de primeira classe. Isso te dá um estilo funcional limpo:",
+"fp-list":"<li><strong>Imutável por padrão</strong> — <code>let</code> não muda; opte por <code>mut</code> quando precisar.</li><li><strong>Closures</strong> — uma função captura o ambiente onde nasce.</li><li><strong>Ordem superior</strong> — passe, retorne e guarde funções.</li><li><strong>Encadeamento</strong> — <code>map</code>/<code>filter</code>/<code>sort</code> se compõem; <code>|></code> liga passos.</li>",
+"fp-2":"Exemplos:",
+"fp-3":"Como as closures capturam o ambiente, uma função pode fabricar outras funções especializadas:",
+
+"h-oop":"Structs e contratos",
+"oop-1":"Um <code>type</code> agrupa campos e métodos. O primeiro parâmetro <code>self</code> dá acesso à instância:",
+"oop-2":"Um <code>contract</code> é uma interface estrutural (estilo Go). Anotar <code>: Forma</code> pede ao compilador para <strong>verificar</strong> a conformidade — se faltar um método, é erro em análise, não em runtime:",
+
+"h-gof":"Padrões de projeto (Gang of Four)",
+"gof-1":"Com closures e contratos, os padrões clássicos do <em>Gang of Four</em> ficam curtos e diretos. Quatro exemplos:",
+"gof-strat-h":"Strategy — o algoritmo é um parâmetro",
+"gof-strat-p":"Em vez de uma hierarquia de classes, passa-se a estratégia como uma closure:",
+"gof-deco-h":"Decorator — embrulhar comportamento",
+"gof-deco-p":"Uma função que recebe outra e retorna uma versão enriquecida (aqui, com registro):",
+"gof-obs-h":"Observer — notificar assinantes",
+"gof-obs-p":"O sujeito guarda uma lista de closures e as chama quando algo acontece:",
+"gof-fact-h":"Factory — escolher o tipo concreto",
+"gof-fact-p":"Uma função decide que <code>type</code> criar; quem chama só usa o contrato comum (<code>Forma</code> do exemplo anterior):",
+
+"h-err":"Erros como valores e <code>defer</code>",
+"err-1":"Não há exceções. Um <code>Result</code> é <code>Ok(v)</code> ou <code>Err(e)</code>; o operador sufixo <code>?</code> desempacota o <code>Ok</code> ou propaga o <code>Err</code>. Os builtins de erro são <code>Ok</code>, <code>Err</code>, <code>is_ok</code>, <code>is_err</code>, <code>unwrap_or</code> e <code>assert</code>:",
+"err-2":"<code>defer</code> adia uma expressão para o fim do bloco (ordem LIFO; roda mesmo em caso de erro) — ideal para fechar recursos:",
+
+"h-modules":"Módulos e biblioteca padrão",
+"modules-1":"<code>import nome</code> traz um módulo da stdlib (ou um arquivo local <code>nome.az</code>); usa-se por <code>nome.funcao(...)</code>:",
+"modules-2":"Os módulos disponíveis e as suas funções principais:",
+"modules-table":"<table><tr><th>Módulo</th><th>Funções</th></tr><tr><td><code>math</code></td><td>sqrt, exp, ln, log10, sin, cos, tan, floor, ceil, round, abs, pow, min, max</td></tr><tr><td><code>linalg</code></td><td>matrix, vector, zeros, randn, num_threads</td></tr><tr><td><code>nn</code></td><td>param, matmul, add, add_bias, relu, gelu, softmax_rows, mse, cross_entropy, backward, sgd, adam</td></tr><tr><td><code>gpt</code></td><td>new, classifier</td></tr><tr><td><code>tokenizer</code></td><td>char, bpe</td></tr><tr><td><code>json</code></td><td>parse, to_string, jq</td></tr><tr><td><code>csv</code></td><td>parse, parse_with_header, write</td></tr><tr><td><code>fs</code></td><td>exists, is_dir, is_file, size, read_dir, create_dir_all, remove_file, remove_dir_all, walk</td></tr><tr><td><code>io</code></td><td>read_to_string, write, read_lines</td></tr><tr><td><code>os</code></td><td>env, set_env, vars, args, cwd, exec</td></tr><tr><td><code>path</code></td><td>join, parent, basename, ext, stem, is_absolute</td></tr><tr><td><code>time</code></td><td>Duration, Stopwatch, Instant</td></tr><tr><td><code>regex</code></td><td>new → is_match, find, replace_all</td></tr><tr><td><code>random</code></td><td>Rng → uniform, normal, range, shuffle</td></tr><tr><td><code>crypto</code></td><td>rand_bytes, rand_u64, rand_below, token_hex</td></tr><tr><td><code>hash</code></td><td>sha256_hex, sha256</td></tr><tr><td><code>http</code></td><td>get, post, dispatch, serve</td></tr><tr><td><code>log</code></td><td>info, warn, error</td></tr></table>",
+
+"h-ai":"Tensores e IA",
+"ai-1":"O operador <code>@</code> é multiplicação de matrizes; o módulo <code>linalg</code> cria e manipula tensores. Com formas anotadas, a compatibilidade é verificada em análise (shape mismatch → erro):",
+"ai-2":"Para treinar, o módulo <code>nn</code> dá parâmetros com gradiente, operações diferenciáveis e otimizadores. O autograd é reverse-mode (grafo + <code>backward</code>). Eis uma regressão linear completa — rode com <code>ayize run</code>:",
+
+"h-llm":"Construir um LLM passo a passo",
+"llm-1":"Um percurso <em>aprender-fazendo</em> ao estilo de Sebastian Raschka (<em>Build a Large Language Model From Scratch</em>): você vai treinar um GPT real e gerar texto, tudo em <code>.az</code>. Os internos do transformer (atenção causal multi-head, LayerNorm, GELU, cross-entropy, autograd) são a stdlib; aqui você compõe e treina.",
+"llm-s1-h":"Passo 1 — Dados: do texto a tokens",
+"llm-s1-p":"Um LLM não vê texto, vê <em>ids</em>. O <code>tokenizer</code> constrói um vocabulário no nível do caractere e converte nos dois sentidos sem perdas:",
+"llm-s2-h":"Passo 2 — O modelo: um GPT",
+"llm-s2-p":"<code>gpt.new</code> constrói um GPT-2 <em>pre-norm</em> completo: embeddings de token e posicionais, blocos transformer (atenção + MLP com GELU + residuais), LayerNorm e a <em>head</em> de saída.",
+"llm-s2-table":"<table><tr><th>Parâmetro</th><th>Significado</th></tr><tr><td><code>vocab</code></td><td>tamanho do vocabulário (do tokenizer)</td></tr><tr><td><code>d</code></td><td>dimensão dos embeddings</td></tr><tr><td><code>block_size</code></td><td>contexto máximo</td></tr><tr><td><code>hidden</code></td><td>largura do MLP</td></tr><tr><td><code>heads</code></td><td>número de cabeças de atenção</td></tr><tr><td><code>seed</code></td><td>semente determinística (mesma seed → mesmos pesos)</td></tr></table>",
+"llm-s3-h":"Passo 3 — Pré-treinamento",
+"llm-s3-p":"<code>model.train</code> roda o training loop real (zero-grad → forward → cross-entropy → backward → passo de Adam) e retorna a loss inicial e final. A loss caindo para perto de zero indica que o modelo memorizou o padrão:",
+"llm-s4-h":"Passo 4 — Geração",
+"llm-s4-p":"Gera autoregressivamente a partir de um prompt. <code>temperatura = 0</code> é guloso (determinístico); valores maiores trazem variedade:",
+"llm-full-h":"Programa completo",
+"llm-full-p":"Junta tudo — treina ~300 passos (poucos segundos) e gera texto:",
+"llm-ft-h":"Finetuning — classificação",
+"llm-ft-p":"<code>gpt.classifier</code> é o modelo-base mais uma cabeça linear. <code>.finetune</code> treina a representação do último token a prever o rótulo e retorna também a acurácia:",
+"llm-save":"Para salvar e recarregar pesos usa-se <code>model.save(\"m.safetensors\")</code> e <code>model.load(...)</code> (formato safetensors, o mesmo da Hugging Face). Um mismatch de forma dá erro limpo, nunca corrupção silenciosa.",
+
+"gpu-1":"Os <code>matmul</code> grandes despacham para a GPU automaticamente — o <em>forward</em> e o <em>backward</em> rodam residentes no dispositivo (sem cópias por operação), em dois backends: CUDA nativo (NVIDIA) e wgpu portável (Vulkan/Metal/DX). Basta rodar o programa com uma variante GPU:",
+"gpu-2":"Para obter uma variante com GPU você não precisa compilar nada — instale-a com a variável <code>AYIZE_GPU</code> (Linux x86_64):",
+
+"h-apx-kw":"Apêndice A — Palavras-chave e statements",
+"apx-kw-1":"As palavras-chave ativas da linguagem e o que cada uma faz:",
+"apx-kw-table":"<table><tr><th>Keyword</th><th>O que faz</th></tr><tr><td><code>fn</code></td><td>declara uma função (ou closure: <code>fn(x) => ...</code>)</td></tr><tr><td><code>let</code></td><td>declara uma variável (imutável)</td></tr><tr><td><code>mut</code></td><td>com <code>let</code>, torna a variável mutável</td></tr><tr><td><code>type</code></td><td>declara um struct (campos + métodos)</td></tr><tr><td><code>contract</code></td><td>declara uma interface estrutural</td></tr><tr><td><code>import</code></td><td>importa um módulo da stdlib ou arquivo local</td></tr><tr><td><code>return</code></td><td>retorna um valor da função</td></tr><tr><td><code>if</code> / <code>else</code></td><td>execução condicional</td></tr><tr><td><code>match</code></td><td>despacha pelo valor (com <code>=></code> e <code>_</code>)</td></tr><tr><td><code>for</code> ... <code>in</code></td><td>itera lista, intervalo, mapa</td></tr><tr><td><code>while</code></td><td>repete enquanto a condição é verdadeira</td></tr><tr><td><code>loop</code></td><td>repete para sempre (sai com <code>break</code>)</td></tr><tr><td><code>break</code> / <code>continue</code></td><td>sai do laço / salta para a próxima iteração</td></tr><tr><td><code>defer</code></td><td>adia uma expressão para o fim do bloco (LIFO)</td></tr><tr><td><code>true</code> / <code>false</code></td><td>literais booleanos</td></tr><tr><td><code>nil</code></td><td>opcional ausente (usado via <code>if let</code>)</td></tr><tr><td><code>self</code></td><td>a instância, dentro de um método</td></tr></table>",
+
+"h-apx-op":"Apêndice B — Operadores",
+"apx-op-table":"<table><tr><th>Grupo</th><th>Operadores</th><th>Notas</th></tr><tr><td>aritméticos</td><td><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>**</code></td><td><code>%</code> resto, <code>**</code> potência; inteiros verificam overflow</td></tr><tr><td>comparação</td><td><code>==</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code></td><td> </td></tr><tr><td>lógicos</td><td><code>&amp;&amp;</code> <code>||</code> <code>!</code></td><td><code>&amp;&amp;</code> e <code>||</code> fazem curto-circuito</td></tr><tr><td>atribuição</td><td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code></td><td>composta: <code>x += e</code> ≡ <code>x = x + e</code></td></tr><tr><td>intervalo</td><td><code>..</code> <code>..=</code></td><td><code>a..b</code> exclui b; <code>a..=b</code> inclui b</td></tr><tr><td>pertencimento</td><td><code>in</code></td><td>lista, string ou mapa</td></tr><tr><td>pipe</td><td><code>|></code></td><td><code>x |> f</code> ≡ <code>f(x)</code></td></tr><tr><td>tensor</td><td><code>@</code></td><td>multiplicação de matrizes</td></tr><tr><td>propagação</td><td><code>?</code></td><td>sufixo, sobre <code>Result</code></td></tr><tr><td>acesso</td><td><code>.</code> <code>[]</code> <code>()</code></td><td>membro, índice, chamada</td></tr></table>",
+
+"h-apx-bi":"Apêndice C — Builtins nativos",
+"apx-bi-1":"Estas funções estão sempre disponíveis, sem <code>import</code>:",
+"apx-bi-table":"<table><tr><th>Builtin</th><th>O que faz</th></tr><tr><td><code>print(x, ...)</code></td><td>escreve no stdout (qualquer valor)</td></tr><tr><td><code>len(x)</code></td><td>tamanho de lista, string, tupla ou mapa</td></tr><tr><td><code>Ok(v)</code></td><td>constrói um <code>Result</code> de sucesso</td></tr><tr><td><code>Err(e)</code></td><td>constrói um <code>Result</code> de erro</td></tr><tr><td><code>is_ok(r)</code></td><td><code>true</code> se o <code>Result</code> é <code>Ok</code></td></tr><tr><td><code>is_err(r)</code></td><td><code>true</code> se o <code>Result</code> é <code>Err</code></td></tr><tr><td><code>unwrap_or(r, d)</code></td><td>o valor do <code>Ok</code>, ou <code>d</code> se for <code>Err</code></td></tr><tr><td><code>assert(c, msg)</code></td><td>falha o programa/teste se <code>c</code> for falso</td></tr></table>",
+"apx-bi-2":"Além destes, os valores têm métodos (ex.: <code>lista.push</code>, <code>string.upper</code>, <code>mapa.keys</code>) descritos nas seções de Coleções e Strings.",
+
+"foot":"Código em <a href=\"https://github.com/angolardevops/ayize\">angolardevops/ayize</a> · referência em <code>docs/LANGUAGE.md</code> · esta página vem de <code>ayize serve doc</code>."
+};
+const EN = {
+"toc-basics":"Basics","toc-lang":"Language","toc-para":"Paradigms","toc-adv":"Advanced","toc-ref":"Reference",
+"nav-intro":"What is Ayize","nav-compare":"Comparison","nav-install":"Installation","nav-start":"Getting started",
+"nav-project":"Create a project","nav-types":"Values and types","nav-vars":"Variables and operators","nav-strings":"Strings",
+"nav-coll":"Collections","nav-flow":"Control flow","nav-fn":"Functions","nav-fp":"Functional programming",
+"nav-oop":"Structs and contracts","nav-gof":"Patterns (GoF)","nav-err":"Errors and defer","nav-modules":"Modules and stdlib",
+"nav-ai":"Tensors and AI","nav-llm":"Build an LLM","nav-apx-kw":"Appendix A · keywords",
+"nav-apx-op":"Appendix B · operators","nav-apx-bi":"Appendix C · builtins",
+"tagline":"An <em>LLM-native</em> programming language (<code>.az</code>): readable, safe and deterministic, with AI batteries built in and GPU training.",
+"pill-deps":"zero dependencies",
+"install-lbl":"Install in one line (ready-to-use binary, you need nothing else):",
+"nav-validate":"Validate your install",
+"h-validate":"Validate your install",
+"validate-1":"After installing, run these steps to confirm everything works:",
+"validate-list":"<li>Version: <code>ayize --version</code> should show <code>ayize 0.1.1</code>.</li><li>Program: <code>ayize new demo &amp;&amp; cd demo &amp;&amp; ayize run</code> should print <code>Olá, Ayize!</code>.</li><li>Training: create a file with the <a href=\"#ai\">linear regression</a> example and run it — it should give <code>W ≈ [1, 2]</code>.</li><li>LLM: run the <a href=\"#llm\">complete nanoGPT program</a> — the loss drops close to zero and generates text.</li><li>GPU (CUDA/wgpu variant): install with <code>AYIZE_GPU</code>; large <code>matmul</code>s then run on the device (loss still decreases).</li>",
+
+"h-intro":"What is Ayize",
+"intro-1":"<strong>Ayize</strong> is a general-purpose programming language designed for the era of language models. Programs live in <code>.az</code> files and run with a single command: <code>ayize run</code>. The syntax is deliberately simple and readable — for humans <em>and</em> for LLMs — and the standard library ships, out of the box, with what you need to build and train neural networks: tensors, autograd, attention, transformers and optimizers.",
+"h-intro-obj":"Goal",
+"intro-obj":"To make it trivial to write correct programs that <em>also</em> know how to do AI. Instead of gluing together dozens of libraries, you get a small, predictable language where training a model is as natural as opening a file. The focus is clarity and determinism: the same program gives the same result, and errors always point to the cause.",
+"h-intro-focus":"What it focuses on",
+"intro-focus":"<li><strong>Errors as values</strong> — no exceptions and no loose <code>null</code>; a <code>Result</code> forces you to handle failure.</li><li><strong>Determinism</strong> — explicit seeds, insertion order preserved in maps, checked integer arithmetic.</li><li><strong>AI built in</strong> — reverse-mode autograd, transformer and optimizers in the stdlib (validated by <em>gradient checking</em>).</li><li><strong>Gradual typing</strong> — annotate types when you want more guarantees; the rest runs as dynamic code.</li><li><strong>Accelerable</strong> — a JIT for the numeric subset and two GPU backends (CUDA and wgpu).</li><li><strong>Portable</strong> — a single binary, with no external dependencies to install.</li>",
+
+"h-compare":"Comparison with Python, Go and Rust",
+"compare-1":"Each language has its place. Ayize aims for the balance between Python's lightness, Go's simplicity and Rust's safety — with AI already inside the language. The table is an honest guide, not a ranking:",
+"compare-table":"<table><tr><th> </th><th>Python</th><th>Go</th><th>Rust</th><th>Ayize</th></tr><tr><td>Readability/curve</td><td>very gentle</td><td>gentle</td><td>steep</td><td>gentle</td></tr><tr><td>Error model</td><td>exceptions</td><td>values (<code>err</code>)</td><td><code>Result</code> + <code>?</code></td><td><code>Result</code> + <code>?</code></td></tr><tr><td>Typing</td><td>dynamic</td><td>static</td><td>strong static</td><td>gradual</td></tr><tr><td>AI in stdlib</td><td>via libraries</td><td>no</td><td>via crates</td><td>built in</td></tr><tr><td>GPU training</td><td>libraries</td><td>—</td><td>crates</td><td>built in</td></tr><tr><td>Distribution</td><td>interpreter + packages</td><td>single binary</td><td>single binary</td><td>single binary</td></tr></table>",
+"compare-note":"It is not a question of “better”: Rust provides memory and performance guarantees that Ayize does not try to replicate; Python has an immense ecosystem; Go shines at concurrent services. Ayize offers a shorter path between an idea and a trained model, keeping errors explicit and a single binary.",
+
+"h-install":"Installation",
+"install-1":"Install the pre-compiled binary with one line — you need no compiler or any other program. Then verify:",
+"install-2":"The installer places <code>ayize</code> in <code>~/.ayize/bin</code>. All of this documentation uses only the <code>ayize</code> command.",
+
+"h-start":"Getting started",
+"start-1":"Execution begins at <code>fn main()</code>. <code>print</code> is always available (it is a <em>builtin</em>, no <code>import</code>). Create <code>hello.az</code>:",
+"start-2":"The <em>toolchain</em> has everything you need, in a single <code>ayize</code> command:",
+"start-cmds":"<table><tr><th>Command</th><th>What it does</th></tr><tr><td><code>ayize run [file]</code></td><td>runs a program (or the project entry)</td></tr><tr><td><code>ayize new &lt;name&gt;</code></td><td>creates a new project</td></tr><tr><td><code>ayize check</code></td><td>analyzes without running (errors, types)</td></tr><tr><td><code>ayize fmt [--check]</code></td><td>formats the code</td></tr><tr><td><code>ayize test</code></td><td>runs the <code>test_*</code> functions</td></tr><tr><td><code>ayize serve doc</code></td><td>opens this documentation</td></tr></table>",
+
+"h-project":"Create a project",
+"project-1":"<code>ayize new</code> generates the minimal structure of a project. You enter the folder and run with <code>ayize run</code> (with no argument, it uses the manifest <em>entry</em>):",
+"project-2":"The generated structure:",
+
+"h-types":"Values and types",
+"types-1":"Ayize has a small set of types. Everything else is composed from these:",
+"types-table":"<table><tr><th>Type</th><th>Examples</th><th>Notes</th></tr><tr><td><code>int</code></td><td><code>42</code>, <code>-7</code></td><td>64-bit integer, checked arithmetic (overflow → error)</td></tr><tr><td><code>float</code></td><td><code>3.14</code></td><td>64-bit floating point</td></tr><tr><td><code>bool</code></td><td><code>true</code>, <code>false</code></td><td> </td></tr><tr><td><code>string</code></td><td><code>\"olá\"</code></td><td>interpolation <code>${...}</code> and escapes <code>\\n \\t</code></td></tr><tr><td><code>nil</code></td><td><code>nil</code></td><td>absent optional (<code>?T</code>); only via <code>if let</code></td></tr><tr><td>list</td><td><code>[1, 2, 3]</code></td><td>homogeneous, indexable, iterable</td></tr><tr><td>tuple</td><td><code>(1, \"a\", true)</code></td><td>heterogeneous, fixed size</td></tr><tr><td>map</td><td><code>{ \"k\": 1 }</code></td><td>string keys, insertion order preserved</td></tr><tr><td><code>type</code></td><td><code>Conta { ... }</code></td><td>struct with fields and methods</td></tr></table>",
+"types-2":"Comments are <code>//</code> (line) and <code>///</code> (doc-comment, documents the following declaration):",
+
+"h-vars":"Variables and operators",
+"vars-1":"<code>let</code> declares (immutable by default); <code>let mut</code> allows reassignment. Reassigning an undeclared name is an <strong>error</strong> (E0426), not a silent slip.",
+"vars-2":"The operators cover the usual ones, plus power (<code>**</code>), <em>pipe</em> (<code>|></code>) and the tensor operator (<code>@</code>). The complete list is in <a href=\"#apx-op\">Appendix B</a>.",
+
+"h-strings":"Strings and interpolation",
+"strings-1":"Strings support interpolation with <code>${expr}</code> (any expression), plus a rich set of methods:",
+"strings-2":"Methods: <code>upper</code>/<code>lower</code>/<code>trim</code>, <code>contains</code>/<code>starts_with</code>/<code>ends_with</code>, <code>replace</code>, <code>split</code>, <code>chars</code>, <code>repeat</code>, <code>slice</code>, <code>index_of</code>, and <code>to_int</code>/<code>to_float</code> (return a <code>Result</code> — safe parse).",
+
+"h-coll":"Collections",
+"coll-1":"Lists, tuples and maps. Indexing accepts negative indices (from the end) and the <code>in</code> operator tests membership:",
+"coll-2":"Lists have methods that mutate (<code>push</code>/<code>pop</code>) and transformers that return a <strong>new</strong> list (chainable): <code>map</code>, <code>filter</code>, <code>sort</code>, <code>reverse</code>, <code>index_of</code>, <code>sum</code>, <code>join</code>, <code>contains</code>, <code>get</code>.",
+
+"h-flow":"Control flow",
+"flow-1":"The usual structures. <code>break</code>/<code>continue</code> only work inside loops:",
+"flow-2":"<code>match</code> dispatches by value (literals, a name that binds the value, or <code>_</code> wildcard; no matching arm is an error). <code>if let</code> is the safe way to use an optional:",
+
+"h-fn":"Functions",
+"fn-1":"Functions are declared with <code>fn</code>. Type annotations are optional (gradual typing):",
+"fn-2":"Anonymous functions (<em>closures</em>) have the concise form <code>fn(x) => expr</code> or with a block <code>fn(x) { ... }</code> — see the next section.",
+
+"h-fp":"Functional programming",
+"fp-1":"Ayize treats functions as first-class values. This gives you a clean functional style:",
+"fp-list":"<li><strong>Immutable by default</strong> — <code>let</code> does not change; opt into <code>mut</code> when you need it.</li><li><strong>Closures</strong> — a function captures the environment where it is born.</li><li><strong>Higher-order</strong> — pass, return and store functions.</li><li><strong>Chaining</strong> — <code>map</code>/<code>filter</code>/<code>sort</code> compose; <code>|></code> connects steps.</li>",
+"fp-2":"Examples:",
+"fp-3":"Since closures capture the environment, a function can manufacture other specialized functions:",
+
+"h-oop":"Structs and contracts",
+"oop-1":"A <code>type</code> groups fields and methods. The first parameter <code>self</code> gives access to the instance:",
+"oop-2":"A <code>contract</code> is a structural interface (Go style). Annotating <code>: Forma</code> asks the compiler to <strong>verify</strong> conformance — if a method is missing, it is an error at analysis time, not at runtime:",
+
+"h-gof":"Design patterns (Gang of Four)",
+"gof-1":"With closures and contracts, the classic <em>Gang of Four</em> patterns become short and direct. Four examples:",
+"gof-strat-h":"Strategy — the algorithm is a parameter",
+"gof-strat-p":"Instead of a class hierarchy, the strategy is passed as a closure:",
+"gof-deco-h":"Decorator — wrap behavior",
+"gof-deco-p":"A function that takes another and returns an enriched version (here, with logging):",
+"gof-obs-h":"Observer — notify subscribers",
+"gof-obs-p":"The subject keeps a list of closures and calls them when something happens:",
+"gof-fact-h":"Factory — choose the concrete type",
+"gof-fact-p":"A function decides which <code>type</code> to create; the caller only uses the common contract (<code>Forma</code> from the previous example):",
+
+"h-err":"Errors as values and <code>defer</code>",
+"err-1":"There are no exceptions. A <code>Result</code> is <code>Ok(v)</code> or <code>Err(e)</code>; the suffix operator <code>?</code> unwraps the <code>Ok</code> or propagates the <code>Err</code>. The error builtins are <code>Ok</code>, <code>Err</code>, <code>is_ok</code>, <code>is_err</code>, <code>unwrap_or</code> and <code>assert</code>:",
+"err-2":"<code>defer</code> postpones an expression to the end of the block (LIFO order; runs even on error) — ideal for closing resources:",
+
+"h-modules":"Modules and standard library",
+"modules-1":"<code>import name</code> brings in a module from the stdlib (or a local file <code>name.az</code>); it is used via <code>name.function(...)</code>:",
+"modules-2":"The available modules and their main functions:",
+"modules-table":"<table><tr><th>Module</th><th>Functions</th></tr><tr><td><code>math</code></td><td>sqrt, exp, ln, log10, sin, cos, tan, floor, ceil, round, abs, pow, min, max</td></tr><tr><td><code>linalg</code></td><td>matrix, vector, zeros, randn, num_threads</td></tr><tr><td><code>nn</code></td><td>param, matmul, add, add_bias, relu, gelu, softmax_rows, mse, cross_entropy, backward, sgd, adam</td></tr><tr><td><code>gpt</code></td><td>new, classifier</td></tr><tr><td><code>tokenizer</code></td><td>char, bpe</td></tr><tr><td><code>json</code></td><td>parse, to_string, jq</td></tr><tr><td><code>csv</code></td><td>parse, parse_with_header, write</td></tr><tr><td><code>fs</code></td><td>exists, is_dir, is_file, size, read_dir, create_dir_all, remove_file, remove_dir_all, walk</td></tr><tr><td><code>io</code></td><td>read_to_string, write, read_lines</td></tr><tr><td><code>os</code></td><td>env, set_env, vars, args, cwd, exec</td></tr><tr><td><code>path</code></td><td>join, parent, basename, ext, stem, is_absolute</td></tr><tr><td><code>time</code></td><td>Duration, Stopwatch, Instant</td></tr><tr><td><code>regex</code></td><td>new → is_match, find, replace_all</td></tr><tr><td><code>random</code></td><td>Rng → uniform, normal, range, shuffle</td></tr><tr><td><code>crypto</code></td><td>rand_bytes, rand_u64, rand_below, token_hex</td></tr><tr><td><code>hash</code></td><td>sha256_hex, sha256</td></tr><tr><td><code>http</code></td><td>get, post, dispatch, serve</td></tr><tr><td><code>log</code></td><td>info, warn, error</td></tr></table>",
+
+"h-ai":"Tensors and AI",
+"ai-1":"The <code>@</code> operator is matrix multiplication; the <code>linalg</code> module creates and manipulates tensors. With annotated shapes, compatibility is checked at analysis time (shape mismatch → error):",
+"ai-2":"To train, the <code>nn</code> module provides parameters with gradients, differentiable operations and optimizers. The autograd is reverse-mode (graph + <code>backward</code>). Here is a complete linear regression — run it with <code>ayize run</code>:",
+
+"h-llm":"Build an LLM step by step",
+"llm-1":"A <em>learn-by-doing</em> journey in the style of Sebastian Raschka (<em>Build a Large Language Model From Scratch</em>): you will train a real GPT and generate text, all in <code>.az</code>. The transformer internals (causal multi-head attention, LayerNorm, GELU, cross-entropy, autograd) are the stdlib; here you compose and train.",
+"llm-s1-h":"Step 1 — Data: from text to tokens",
+"llm-s1-p":"An LLM does not see text, it sees <em>ids</em>. The <code>tokenizer</code> builds a character-level vocabulary and converts both ways without loss:",
+"llm-s2-h":"Step 2 — The model: a GPT",
+"llm-s2-p":"<code>gpt.new</code> builds a complete <em>pre-norm</em> GPT-2: token and positional embeddings, transformer blocks (attention + MLP with GELU + residuals), LayerNorm and the output <em>head</em>.",
+"llm-s2-table":"<table><tr><th>Parameter</th><th>Meaning</th></tr><tr><td><code>vocab</code></td><td>vocabulary size (from the tokenizer)</td></tr><tr><td><code>d</code></td><td>embedding dimension</td></tr><tr><td><code>block_size</code></td><td>maximum context</td></tr><tr><td><code>hidden</code></td><td>MLP width</td></tr><tr><td><code>heads</code></td><td>number of attention heads</td></tr><tr><td><code>seed</code></td><td>deterministic seed (same seed → same weights)</td></tr></table>",
+"llm-s3-h":"Step 3 — Pre-training",
+"llm-s3-p":"<code>model.train</code> runs the real training loop (zero-grad → forward → cross-entropy → backward → Adam step) and returns the initial and final loss. The loss dropping close to zero indicates the model has memorized the pattern:",
+"llm-s4-h":"Step 4 — Generation",
+"llm-s4-p":"Generates autoregressively from a prompt. <code>temperature = 0</code> is greedy (deterministic); higher values bring variety:",
+"llm-full-h":"Complete program",
+"llm-full-p":"Puts it all together — trains ~300 steps (a few seconds) and generates text:",
+"llm-ft-h":"Finetuning — classification",
+"llm-ft-p":"<code>gpt.classifier</code> is the base model plus a linear head. <code>.finetune</code> trains the last token's representation to predict the label and also returns the accuracy:",
+"llm-save":"To save and reload weights, use <code>model.save(\"m.safetensors\")</code> and <code>model.load(...)</code> (safetensors format, the same as Hugging Face). A shape mismatch gives a clean error, never silent corruption.",
+
+"gpu-1":"Large <code>matmul</code> operations dispatch to the GPU automatically — the <em>forward</em> and <em>backward</em> run resident on the device (no copies per operation), on two backends: native CUDA (NVIDIA) and portable wgpu (Vulkan/Metal/DX). Just run the program with a GPU variant:",
+"gpu-2":"To get a GPU variant you don't need to compile anything — install it with the <code>AYIZE_GPU</code> variable (Linux x86_64):",
+
+"h-apx-kw":"Appendix A — Keywords and statements",
+"apx-kw-1":"The language's active keywords and what each one does:",
+"apx-kw-table":"<table><tr><th>Keyword</th><th>What it does</th></tr><tr><td><code>fn</code></td><td>declares a function (or closure: <code>fn(x) => ...</code>)</td></tr><tr><td><code>let</code></td><td>declares a variable (immutable)</td></tr><tr><td><code>mut</code></td><td>with <code>let</code>, makes the variable mutable</td></tr><tr><td><code>type</code></td><td>declares a struct (fields + methods)</td></tr><tr><td><code>contract</code></td><td>declares a structural interface</td></tr><tr><td><code>import</code></td><td>imports a module from the stdlib or a local file</td></tr><tr><td><code>return</code></td><td>returns a value from the function</td></tr><tr><td><code>if</code> / <code>else</code></td><td>conditional execution</td></tr><tr><td><code>match</code></td><td>dispatches by value (with <code>=></code> and <code>_</code>)</td></tr><tr><td><code>for</code> ... <code>in</code></td><td>iterates over a list, range, map</td></tr><tr><td><code>while</code></td><td>repeats while the condition is true</td></tr><tr><td><code>loop</code></td><td>repeats forever (exits with <code>break</code>)</td></tr><tr><td><code>break</code> / <code>continue</code></td><td>exits the loop / skips to the next iteration</td></tr><tr><td><code>defer</code></td><td>postpones an expression to the end of the block (LIFO)</td></tr><tr><td><code>true</code> / <code>false</code></td><td>boolean literals</td></tr><tr><td><code>nil</code></td><td>absent optional (used via <code>if let</code>)</td></tr><tr><td><code>self</code></td><td>the instance, inside a method</td></tr></table>",
+
+"h-apx-op":"Appendix B — Operators",
+"apx-op-table":"<table><tr><th>Group</th><th>Operators</th><th>Notes</th></tr><tr><td>arithmetic</td><td><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>**</code></td><td><code>%</code> remainder, <code>**</code> power; integers check overflow</td></tr><tr><td>comparison</td><td><code>==</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code></td><td> </td></tr><tr><td>logical</td><td><code>&amp;&amp;</code> <code>||</code> <code>!</code></td><td><code>&amp;&amp;</code> and <code>||</code> short-circuit</td></tr><tr><td>assignment</td><td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code></td><td>compound: <code>x += e</code> ≡ <code>x = x + e</code></td></tr><tr><td>range</td><td><code>..</code> <code>..=</code></td><td><code>a..b</code> excludes b; <code>a..=b</code> includes b</td></tr><tr><td>membership</td><td><code>in</code></td><td>list, string or map</td></tr><tr><td>pipe</td><td><code>|></code></td><td><code>x |> f</code> ≡ <code>f(x)</code></td></tr><tr><td>tensor</td><td><code>@</code></td><td>matrix multiplication</td></tr><tr><td>propagation</td><td><code>?</code></td><td>suffix, over <code>Result</code></td></tr><tr><td>access</td><td><code>.</code> <code>[]</code> <code>()</code></td><td>member, index, call</td></tr></table>",
+
+"h-apx-bi":"Appendix C — Native builtins",
+"apx-bi-1":"These functions are always available, without <code>import</code>:",
+"apx-bi-table":"<table><tr><th>Builtin</th><th>What it does</th></tr><tr><td><code>print(x, ...)</code></td><td>writes to stdout (any value)</td></tr><tr><td><code>len(x)</code></td><td>size of a list, string, tuple or map</td></tr><tr><td><code>Ok(v)</code></td><td>builds a success <code>Result</code></td></tr><tr><td><code>Err(e)</code></td><td>builds an error <code>Result</code></td></tr><tr><td><code>is_ok(r)</code></td><td><code>true</code> if the <code>Result</code> is <code>Ok</code></td></tr><tr><td><code>is_err(r)</code></td><td><code>true</code> if the <code>Result</code> is <code>Err</code></td></tr><tr><td><code>unwrap_or(r, d)</code></td><td>the <code>Ok</code> value, or <code>d</code> if it is <code>Err</code></td></tr><tr><td><code>assert(c, msg)</code></td><td>fails the program/test if <code>c</code> is false</td></tr></table>",
+"apx-bi-2":"Beyond these, values have methods (e.g.: <code>list.push</code>, <code>string.upper</code>, <code>map.keys</code>) described in the Collections and Strings sections.",
+
+"foot":"Code at <a href=\"https://github.com/angolardevops/ayize\">angolardevops/ayize</a> · reference in <code>docs/LANGUAGE.md</code> · this page comes from <code>ayize serve doc</code>."
+};
+
+const DICTS = { "pt-PT": PT, "pt-BR": BR, "en": EN };
+function setLang(lang){
+  const d = DICTS[lang] || PT;
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const k = el.dataset.i18n;
+    const v = (d[k] !== undefined) ? d[k] : PT[k];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.querySelectorAll(".langsw button").forEach(b => b.classList.toggle("on", b.dataset.lang === lang));
+}
+document.querySelectorAll(".langsw button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+setLang("pt-PT");
+highlightAll();
+</script>
+</body>
+</html>
