@@ -40,6 +40,19 @@ ayize completions bash   # ou zsh / fish
 # fish:  ayize completions fish > ~/.config/fish/completions/ayize.fish
 ```
 
+## Extensão para VS Code
+
+Coloração de sintaxe dos ficheiros `.az`, snippets e (opcional) language server.
+Instala numa linha:
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf \
+  https://raw.githubusercontent.com/angolardevops/ayize-releases/main/install-vscode.sh | sh
+```
+
+Funciona com VS Code, Insiders, VSCodium e Cursor. A coloração e os snippets funcionam
+de imediato; os diagnósticos ativam-se se o `ayize-lsp` estiver no `PATH`.
+
 ## Aceleração GPU
 
 Há variantes com GPU para Linux x86_64. Escolhe-as com a variável `AYIZE_GPU`:
