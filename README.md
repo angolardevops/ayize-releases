@@ -40,18 +40,20 @@ ayize completions bash   # ou zsh / fish
 # fish:  ayize completions fish > ~/.config/fish/completions/ayize.fish
 ```
 
-## Extensão para VS Code
+## Extensão para o editor (VS Code, Cursor, Antigravity…)
 
 Coloração de sintaxe dos ficheiros `.az`, snippets e (opcional) language server.
-Instala numa linha:
+Instala numa linha — em **todos** os editores compatíveis que tiveres:
 
 ```sh
 curl --proto '=https' --tlsv1.2 -sSf \
   https://raw.githubusercontent.com/angolardevops/ayize-releases/main/install-vscode.sh | sh
 ```
 
-Funciona com VS Code, Insiders, VSCodium e Cursor. A coloração e os snippets funcionam
-de imediato; os diagnósticos ativam-se se o `ayize-lsp` estiver no `PATH`.
+Suporta **VS Code**, **Insiders**, **VSCodium**, **Cursor** e **Google Antigravity**
+(todos forks do VS Code, mesmo `.vsix`). Para escolher só um:
+`… | AYIZE_EDITOR=antigravity sh`. A coloração e os snippets funcionam de imediato; os
+diagnósticos ativam-se se o `ayize-lsp` estiver no `PATH`.
 
 ## Aceleração GPU
 
