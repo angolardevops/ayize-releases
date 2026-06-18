@@ -24,13 +24,26 @@ case "$arch" in
 esac
 
 asset="ayize-${os_tag}-${arch_tag}"
+
+# Variante com aceleração GPU (opcional):
+#   AYIZE_GPU=cuda  → NVIDIA (precisa de libcuda/libnvrtc no sistema)
+#   AYIZE_GPU=wgpu  → portável (Vulkan/Metal/DX)
+gpu="${AYIZE_GPU:-}"
+case "$gpu" in
+  "") ;;
+  cuda | wgpu) asset="${asset}-${gpu}" ;;
+  *) echo "ayize: AYIZE_GPU inválido ('$gpu') — usa 'cuda' ou 'wgpu'"; exit 1 ;;
+esac
+
 url="https://github.com/${REPO}/releases/latest/download/${asset}"
 
 echo "A descarregar ${asset}…"
 mkdir -p "$INSTALL_DIR"
 if ! curl --proto '=https' --tlsv1.2 -fSL "$url" -o "$INSTALL_DIR/ayize"; then
-  echo "ayize: ainda não há binário pré-compilado para ${os_tag}-${arch_tag}."
-  echo "       Compila a partir da fonte: https://github.com/angolardevops/ayize"
+  echo "ayize: não há binário '${asset}' nesta release."
+  if [ -n "$gpu" ]; then
+    echo "       As variantes GPU existem para linux-x86_64; nas outras plataformas usa a versão base (sem AYIZE_GPU)."
+  fi
   exit 1
 fi
 chmod +x "$INSTALL_DIR/ayize"

@@ -18,15 +18,31 @@ ayize --help          # a toolchain: new / run / check / fmt / test
 ayize serve doc       # abre a documentação oficial no browser
 ```
 
+## Aceleração GPU
+
+Há variantes com GPU para Linux x86_64. Escolhe-as com a variável `AYIZE_GPU`:
+
+```sh
+# NVIDIA (CUDA) — precisa de libcuda/libnvrtc no sistema
+curl --proto '=https' --tlsv1.2 -sSf \
+  https://raw.githubusercontent.com/angolardevops/ayize-releases/main/install.sh | AYIZE_GPU=cuda sh
+
+# Portável (wgpu: Vulkan / Metal / DX)
+curl --proto '=https' --tlsv1.2 -sSf \
+  https://raw.githubusercontent.com/angolardevops/ayize-releases/main/install.sh | AYIZE_GPU=wgpu sh
+```
+
+Com uma variante GPU, os `matmul` grandes correm na placa automaticamente (forward e
+backward residentes no dispositivo). A versão base usa CPU.
+
 ## Plataformas
 
-| Plataforma            | Asset                    | Estado |
-|-----------------------|--------------------------|--------|
-| Linux x86_64          | `ayize-linux-x86_64`     | ✅     |
-| macOS / Windows / ARM | —                        | compila a partir da fonte |
-
-Para outras plataformas (ou para ativar o JIT LLVM / GPU CUDA/wgpu), compila a partir da
-fonte: <https://github.com/angolardevops/ayize>.
+| Plataforma            | Asset                         | Estado |
+|-----------------------|-------------------------------|--------|
+| Linux x86_64 (CPU)    | `ayize-linux-x86_64`          | ✅     |
+| Linux x86_64 (CUDA)   | `ayize-linux-x86_64-cuda`     | ✅     |
+| Linux x86_64 (wgpu)   | `ayize-linux-x86_64-wgpu`     | ✅     |
+| macOS / Windows / ARM | —                             | no roteiro |
 
 ## Licença
 
