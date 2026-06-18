@@ -63,6 +63,27 @@ else
   echo "Extensão Ayize instalada em $ext_dir. Reinicia o editor."
 fi
 
+# ── Language server (diagnósticos): descarrega o ayize-lsp da plataforma, se existir ──
+os="$(uname -s)"
+arch="$(uname -m)"
+case "$os" in Linux) ost="linux" ;; Darwin) ost="macos" ;; *) ost="" ;; esac
+case "$arch" in x86_64 | amd64) art="x86_64" ;; aarch64 | arm64) art="aarch64" ;; *) art="" ;; esac
+
 echo
-echo "Sintaxe .az ativa. O language server (diagnósticos) é opcional: instala 'ayize-lsp'"
-echo "no PATH para o ativar — sem ele, o highlighting e os snippets funcionam na mesma."
+if [ -n "$ost" ] && [ -n "$art" ] && \
+   curl --proto '=https' --tlsv1.2 -fSL \
+     "https://github.com/${REPO}/releases/latest/download/ayize-lsp-${ost}-${art}" \
+     -o "$tmp/ayize-lsp" 2>/dev/null; then
+  bin_dir="${AYIZE_HOME:-$HOME/.ayize}/bin"
+  mkdir -p "$bin_dir"
+  chmod +x "$tmp/ayize-lsp"
+  mv -f "$tmp/ayize-lsp" "$bin_dir/ayize-lsp"
+  echo "Language server instalado em $bin_dir/ayize-lsp — diagnósticos ativos."
+  case ":${PATH}:" in
+    *":${bin_dir}:"*) ;;
+    *) echo "  (garante que ${bin_dir} está no PATH; o mesmo do binário 'ayize')" ;;
+  esac
+else
+  echo "Sintaxe .az ativa. Diagnósticos (LSP) ainda não disponíveis para esta plataforma —"
+  echo "o highlighting e os snippets funcionam na mesma."
+fi

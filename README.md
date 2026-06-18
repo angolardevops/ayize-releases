@@ -52,8 +52,10 @@ curl --proto '=https' --tlsv1.2 -sSf \
 
 Suporta **VS Code**, **Insiders**, **VSCodium**, **Cursor** e **Google Antigravity**
 (todos forks do VS Code, mesmo `.vsix`). Para escolher só um:
-`… | AYIZE_EDITOR=antigravity sh`. A coloração e os snippets funcionam de imediato; os
-diagnósticos ativam-se se o `ayize-lsp` estiver no `PATH`.
+`… | AYIZE_EDITOR=antigravity sh`. A coloração e os snippets funcionam de imediato; o
+instalador também descarrega o **language server** (`ayize-lsp`) para `~/.ayize/bin`,
+ativando os **diagnósticos** (onde houver binário para a plataforma — atualmente
+Linux x86_64).
 
 ## Aceleração GPU
 
