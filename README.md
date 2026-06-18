@@ -29,6 +29,17 @@ Para forçar a reinstalação (ou trocar de variante CPU/GPU sem mudar de versã
 `AYIZE_FORCE=1`. A documentação online está em
 <https://angolardevops.github.io/ayize-releases/>.
 
+## Auto-completar
+
+O instalador gera os scripts de auto-completar em `~/.ayize/completions/` e mostra como
+ativá-los. Em qualquer momento podes regenerá-los com o próprio binário:
+
+```sh
+ayize completions bash   # ou zsh / fish
+# bash:  . ~/.ayize/completions/ayize.bash      (ou: source <(ayize completions bash))
+# fish:  ayize completions fish > ~/.config/fish/completions/ayize.fish
+```
+
 ## Aceleração GPU
 
 Há variantes com GPU para Linux x86_64. Escolhe-as com a variável `AYIZE_GPU`:

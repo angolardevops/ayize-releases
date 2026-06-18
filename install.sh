@@ -91,6 +91,21 @@ else
   echo "Ayize ${new_ver:+$new_ver }instalado em $INSTALL_DIR/ayize"
 fi
 
+# ── Auto-completar: gera os scripts a partir do binário (se o comando existir) ──
+comp_dir="${AYIZE_HOME:-$HOME/.ayize}/completions"
+if "$INSTALL_DIR/ayize" completions bash >/dev/null 2>&1; then
+  mkdir -p "$comp_dir"
+  for sh_ in bash zsh fish; do
+    "$INSTALL_DIR/ayize" completions "$sh_" > "$comp_dir/ayize.$sh_" 2>/dev/null || true
+  done
+  echo
+  echo "Auto-completar gerado em $comp_dir. Para ativar o do teu shell:"
+  echo "  bash:  echo '. $comp_dir/ayize.bash' >> ~/.bashrc"
+  echo "  zsh :  mkdir -p ~/.zfunc && ln -sf $comp_dir/ayize.zsh ~/.zfunc/_ayize"
+  echo "         (e garante no ~/.zshrc:  fpath=(~/.zfunc \$fpath); autoload -Uz compinit; compinit)"
+  echo "  fish:  cp $comp_dir/ayize.fish ~/.config/fish/completions/ayize.fish"
+fi
+
 case ":${PATH}:" in
   *":${INSTALL_DIR}:"*) ;;
   *)
