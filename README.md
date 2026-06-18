@@ -18,6 +18,17 @@ ayize --help          # a toolchain: new / run / check / fmt / test
 ayize serve doc       # abre a documentação oficial no browser
 ```
 
+## Atualizar
+
+Corre **o mesmo comando** outra vez. O instalador deteta a versão instalada e:
+
+- se já for a mais recente → não faz nada;
+- se for mais antiga → atualiza-a (descarrega e substitui), mostrando `0.1.0 → 0.1.1`.
+
+Para forçar a reinstalação (ou trocar de variante CPU/GPU sem mudar de versão), usa
+`AYIZE_FORCE=1`. A documentação online está em
+<https://angolardevops.github.io/ayize-releases/>.
+
 ## Aceleração GPU
 
 Há variantes com GPU para Linux x86_64. Escolhe-as com a variável `AYIZE_GPU`:
