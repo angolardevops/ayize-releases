@@ -68,6 +68,7 @@
   <a href="#start" data-i18n="nav-start">Primeiros passos</a>
   <a href="#project" data-i18n="nav-project">Criar um projecto</a>
   <a href="#validate" data-i18n="nav-validate">Validar a instalação</a>
+  <a href="#repl" data-i18n="nav-repl">REPL interativo</a>
   <h4 data-i18n="toc-lang">Linguagem</h4>
   <a href="#types" data-i18n="nav-types">Valores e tipos</a>
   <a href="#vars" data-i18n="nav-vars">Variáveis e operadores</a>
@@ -80,10 +81,12 @@
   <a href="#oop" data-i18n="nav-oop">Structs e contratos</a>
   <a href="#gof" data-i18n="nav-gof">Padrões (GoF)</a>
   <a href="#err" data-i18n="nav-err">Erros e defer</a>
+  <a href="#enum" data-i18n="nav-enum">Tipos-soma (enum)</a>
   <h4 data-i18n="toc-adv">Avançado</h4>
   <a href="#modules" data-i18n="nav-modules">Módulos e stdlib</a>
   <a href="#ai" data-i18n="nav-ai">Tensores e IA</a>
   <a href="#llm" data-i18n="nav-llm">Construir um LLM</a>
+  <a href="#conc" data-i18n="nav-conc">Concorrência</a>
   <a href="#gpu">GPU</a>
   <h4 data-i18n="toc-ref">Referência</h4>
   <a href="#apx-kw" data-i18n="nav-apx-kw">Apêndice A · keywords</a>
@@ -173,6 +176,19 @@ ayize 0.1.1
 $ ayize new demo && cd demo && ayize run
 Olá, Ayize!</code></pre>
 <ol data-i18n="validate-list"></ol>
+
+<!-- ───────────────────────── REPL ───────────────────────── -->
+<h2 id="repl" data-i18n="h-repl"></h2>
+<p data-i18n="repl-1"></p>
+<pre><code class="shell">$ ayize repl
+ayize&gt; let x = 21
+ayize&gt; x * 2
+42
+ayize&gt; fn dobro(n) { return n + n }
+ayize&gt; dobro(x)
+42
+ayize&gt; :quit</code></pre>
+<p data-i18n="repl-2"></p>
 
 <!-- ───────────────────────── TIPOS ───────────────────────── -->
 <h2 id="types" data-i18n="h-types"></h2>
@@ -398,6 +414,28 @@ fn main() {
     print("trabalho")
 }   // imprime: trabalho, depois fecho</code></pre>
 
+<!-- ───────────────────────── TIPOS-SOMA ───────────────────────── -->
+<h2 id="enum" data-i18n="h-enum"></h2>
+<p data-i18n="enum-1"></p>
+<pre><code>enum Shape {
+    Circle(float),
+    Rect(float, float),
+    Empty
+}
+
+fn area(s) {
+    match s {
+        Circle(r)  => { return 3.14159 * r * r }
+        Rect(w, h) => { return w * h }     // liga w e h aos campos
+        Empty      => { return 0.0 }       // variante nulária
+    }
+}</code></pre>
+<p data-i18n="enum-2"></p>
+<pre><code>match parse(linha) {
+    Ok(n)  => print("ok: ${n}"),
+    Err(e) => print("erro: ${e}"),
+}</code></pre>
+
 <!-- ───────────────────────── MÓDULOS ───────────────────────── -->
 <h2 id="modules" data-i18n="h-modules"></h2>
 <p data-i18n="modules-1"></p>
@@ -520,6 +558,29 @@ curl --proto '=https' --tlsv1.2 -sSf \
   https://raw.githubusercontent.com/angolardevops/ayize-releases/main/install.sh | AYIZE_GPU=wgpu sh</code></pre>
 <pre><code class="shell">$ ayize run train_gpu.az    # com uma variante GPU, os matmul grandes correm na placa</code></pre>
 
+<!-- ───────────────────────── CONCORRÊNCIA ───────────────────────── -->
+<h2 id="conc" data-i18n="h-conc"></h2>
+<p data-i18n="conc-1"></p>
+<ul data-i18n="conc-ops"></ul>
+<pre><code>fn produtor(c, n) {
+    for i in 0..n { c <- i * i }
+    close(c)
+}
+fn main() {
+    let c = chan(2)
+    spawn produtor(c, 5)
+    let mut soma = 0
+    for v in c { soma += v }       // canal como stream, até fechar
+    print(soma)                     // 30
+}</code></pre>
+<p data-i18n="conc-2"></p>
+<pre><code>select {
+    case v = <- a:  { print("a: ${v}") }
+    case b <- x:    { print("enviei para b") }
+    default:        { print("nada pronto") }
+}</code></pre>
+<p class="note" data-i18n="conc-note"></p>
+
 <!-- ───────────────────────── APÊNDICE A ───────────────────────── -->
 <h2 id="apx-kw" data-i18n="h-apx-kw"></h2>
 <p data-i18n="apx-kw-1"></p>
@@ -542,7 +603,7 @@ curl --proto '=https' --tlsv1.2 -sSf \
 
 <script>
 // ── Syntax highlight (sem dependências; corre offline) ──────────────────────
-const KW = /\b(?:fn|let|mut|if|else|for|in|while|loop|match|return|break|continue|import|type|contract|defer|true|false|nil|self|and|or|not)\b/y;
+const KW = /\b(?:fn|let|mut|if|else|for|in|while|loop|match|return|break|continue|import|type|contract|enum|defer|spawn|select|chan|true|false|nil|self|and|or|not)\b/y;
 const TOK = [["comment", /\/\/[^\n]*/y], ["string", /"(?:[^"\\]|\\.)*"/y], ["number", /\b\d+(?:\.\d+)?\b/y], ["kw", KW]];
 function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function hl(src){
@@ -582,6 +643,10 @@ const PT = {
 "nav-validate":"Validar a instalação",
 "h-validate":"Validar a instalação",
 "validate-1":"Depois de instalares, corre estes passos para confirmar que está tudo a funcionar:",
+"nav-repl":"REPL interativo",
+"h-repl":"REPL — explorar de forma interativa",
+"repl-1":"O comando <code>ayize repl</code> abre um <em>read-eval-print loop</em>: escreves uma linha, ela corre, o valor aparece. O estado <strong>persiste</strong> entre linhas (variáveis, funções, tipos, <code>import</code>), e um erro <strong>não derruba</strong> a sessão. É ideal para experimentar uma ideia antes de a pôr num ficheiro.",
+"repl-2":"Linhas incompletas (com <code>{</code>, <code>(</code> ou <code>[</code> por fechar) continuam na linha seguinte. <code>:help</code> mostra a ajuda; <code>:quit</code> (ou <kbd>Ctrl-D</kbd>) sai.",
 "validate-list":"<li>Versão: <code>ayize --version</code> deve mostrar <code>ayize 0.1.1</code>.</li><li>Programa: <code>ayize new demo &amp;&amp; cd demo &amp;&amp; ayize run</code> deve imprimir <code>Olá, Ayize!</code>.</li><li>Treino: cria um ficheiro com o exemplo de <a href=\"#ai\">regressão linear</a> e corre-o — deve dar <code>W ≈ [1, 2]</code>.</li><li>LLM: corre o <a href=\"#llm\">programa completo do nanoGPT</a> — a loss cai para perto de zero e gera texto.</li><li>GPU (variante CUDA/wgpu): instala com <code>AYIZE_GPU</code>; os <code>matmul</code> grandes passam a correr na placa (a loss desce na mesma).</li>",
 
 "h-intro":"O que é o Ayize",
@@ -603,7 +668,7 @@ const PT = {
 "h-start":"Primeiros passos",
 "start-1":"A execução começa em <code>fn main()</code>. <code>print</code> está sempre disponível (é um <em>builtin</em>, sem <code>import</code>). Cria <code>hello.az</code>:",
 "start-2":"A <em>toolchain</em> tem tudo o que precisas, num só comando <code>ayize</code>:",
-"start-cmds":"<table><tr><th>Comando</th><th>O que faz</th></tr><tr><td><code>ayize run [ficheiro]</code></td><td>corre um programa (ou o entry do projecto)</td></tr><tr><td><code>ayize new &lt;nome&gt;</code></td><td>cria um projecto novo</td></tr><tr><td><code>ayize check</code></td><td>analisa sem executar (erros, tipos)</td></tr><tr><td><code>ayize fmt [--check]</code></td><td>formata o código</td></tr><tr><td><code>ayize test</code></td><td>corre as funções <code>test_*</code></td></tr><tr><td><code>ayize serve doc</code></td><td>abre esta documentação</td></tr><tr><td><code>ayize completions &lt;shell&gt;</code></td><td>gera o auto-completar (bash/zsh/fish)</td></tr></table>",
+"start-cmds":"<table><tr><th>Comando</th><th>O que faz</th></tr><tr><td><code>ayize run [ficheiro]</code></td><td>corre um programa (ou o entry do projecto)</td></tr><tr><td><code>ayize repl</code></td><td>REPL interativo (read-eval-print)</td></tr><tr><td><code>ayize new &lt;nome&gt;</code></td><td>cria um projecto novo</td></tr><tr><td><code>ayize check</code></td><td>analisa sem executar (erros, tipos)</td></tr><tr><td><code>ayize fmt [--check]</code></td><td>formata o código</td></tr><tr><td><code>ayize test</code></td><td>corre as funções <code>test_*</code></td></tr><tr><td><code>ayize serve doc</code></td><td>abre esta documentação</td></tr><tr><td><code>ayize completions &lt;shell&gt;</code></td><td>gera o auto-completar (bash/zsh/fish)</td></tr></table>",
 
 "h-project":"Criar um projecto",
 "project-1":"<code>ayize new</code> gera a estrutura mínima de um projecto. Entras na pasta e corres com <code>ayize run</code> (sem argumento, usa o <em>entry</em> do manifesto):",
@@ -687,13 +752,23 @@ const PT = {
 
 "gpu-1":"Os <code>matmul</code> grandes despacham para a GPU automaticamente — o <em>forward</em> e o <em>backward</em> correm residentes no dispositivo (sem cópias por operação), em dois backends: CUDA nativo (NVIDIA) e wgpu portável (Vulkan/Metal/DX). Basta correr o programa com uma variante GPU:",
 "gpu-2":"Para obteres uma variante com GPU não precisas de compilar nada — instala-a com a variável <code>AYIZE_GPU</code> (Linux x86_64):",
+"nav-enum":"Tipos-soma (enum)",
+"nav-conc":"Concorrência",
+"h-enum":"Tipos-soma (enum)",
+"enum-1":"Um <code>enum</code> é um tipo cujo valor é <strong>uma de várias variantes</strong>, cada uma com (ou sem) campos. Constroem-se pelo nome e destruturam-se com <code>match</code> — ligando os campos. Convenção: variantes em PascalCase (<code>Circle</code>, <code>Empty</code>); um braço sem casar (e sem <code>_</code>) é erro (E0547), nunca um resultado errado em silêncio.",
+"enum-2":"Os padrões de construtor também funcionam com o <code>Result</code> embutido — <code>Ok(v)</code> e <code>Err(e)</code> destruturam-se diretamente (sem <code>is_ok</code>/<code>unwrap_or</code>):",
+"h-conc":"Concorrência",
+"conc-1":"A Ayize tem concorrência <strong>CSP</strong> (estilo Go) na linguagem, com um escalonador <strong>cooperativo e determinista</strong>: só uma tarefa corre de cada vez e a ordem é reprodutível. Pelos canais viajam <strong>dados</strong> (não memória partilhada) — <em>“share by communicating”</em>.",
+"conc-ops":"<li><code>chan()</code> / <code>chan(n)</code> — cria um canal (buffer opcional <code>n</code>).</li><li><code>spawn f(args)</code> — corre a função de topo <code>f</code> numa tarefa concorrente.</li><li><code>c &lt;- v</code> — envia; <code>&lt;- c</code> — recebe (bloqueiam conforme o canal).</li><li><code>close(c)</code> — fecha o canal; <code>for v in c</code> — itera o canal como <strong>stream</strong> até fechar.</li>",
+"conc-2":"<code>select</code> espera pelo <strong>primeiro canal pronto</strong> (escolha determinista, pela ordem dos casos). Com <code>default</code>, não bloqueia (sondagem):",
+"conc-note":"Só tipos de <strong>dados</strong> atravessam um canal — enviar uma closure/struct é erro (E0571). Um <em>deadlock</em> (todas as tarefas bloqueadas) é detetado e reportado (E0576), nunca pendura.",
 
 "h-apx-kw":"Apêndice A — Palavras-chave e statements",
 "apx-kw-1":"As palavras-chave activas da linguagem e o que cada uma faz:",
-"apx-kw-table":"<table><tr><th>Keyword</th><th>O que faz</th></tr><tr><td><code>fn</code></td><td>declara uma função (ou closure: <code>fn(x) => ...</code>)</td></tr><tr><td><code>let</code></td><td>declara uma variável (imutável)</td></tr><tr><td><code>mut</code></td><td>com <code>let</code>, torna a variável mutável</td></tr><tr><td><code>type</code></td><td>declara um struct (campos + métodos)</td></tr><tr><td><code>contract</code></td><td>declara uma interface estrutural</td></tr><tr><td><code>import</code></td><td>importa um módulo da stdlib ou ficheiro local</td></tr><tr><td><code>return</code></td><td>devolve um valor da função</td></tr><tr><td><code>if</code> / <code>else</code></td><td>execução condicional</td></tr><tr><td><code>match</code></td><td>despacha pelo valor (com <code>=></code> e <code>_</code>)</td></tr><tr><td><code>for</code> ... <code>in</code></td><td>itera lista, intervalo, mapa</td></tr><tr><td><code>while</code></td><td>repete enquanto a condição é verdadeira</td></tr><tr><td><code>loop</code></td><td>repete para sempre (sai com <code>break</code>)</td></tr><tr><td><code>break</code> / <code>continue</code></td><td>sai do ciclo / salta para a próxima iteração</td></tr><tr><td><code>defer</code></td><td>adia uma expressão para o fim do bloco (LIFO)</td></tr><tr><td><code>true</code> / <code>false</code></td><td>literais booleanos</td></tr><tr><td><code>nil</code></td><td>opcional ausente (usado via <code>if let</code>)</td></tr><tr><td><code>self</code></td><td>a instância, dentro de um método</td></tr></table>",
+"apx-kw-table":"<table><tr><th>Keyword</th><th>O que faz</th></tr><tr><td><code>fn</code></td><td>declara uma função (ou closure: <code>fn(x) => ...</code>)</td></tr><tr><td><code>let</code></td><td>declara uma variável (imutável)</td></tr><tr><td><code>mut</code></td><td>com <code>let</code>, torna a variável mutável</td></tr><tr><td><code>type</code></td><td>declara um struct (campos + métodos)</td></tr><tr><td><code>contract</code></td><td>declara uma interface estrutural</td></tr><tr><td><code>import</code></td><td>importa um módulo da stdlib ou ficheiro local</td></tr><tr><td><code>return</code></td><td>devolve um valor da função</td></tr><tr><td><code>if</code> / <code>else</code></td><td>execução condicional</td></tr><tr><td><code>match</code></td><td>despacha pelo valor (com <code>=></code> e <code>_</code>)</td></tr><tr><td><code>for</code> ... <code>in</code></td><td>itera lista, intervalo, mapa</td></tr><tr><td><code>while</code></td><td>repete enquanto a condição é verdadeira</td></tr><tr><td><code>loop</code></td><td>repete para sempre (sai com <code>break</code>)</td></tr><tr><td><code>break</code> / <code>continue</code></td><td>sai do ciclo / salta para a próxima iteração</td></tr><tr><td><code>defer</code></td><td>adia uma expressão para o fim do bloco (LIFO)</td></tr><tr><td><code>enum</code></td><td>declara um tipo-soma (variantes)</td></tr><tr><td><code>spawn</code></td><td>corre uma função numa tarefa concorrente</td></tr><tr><td><code>select</code></td><td>espera no 1.º canal pronto (<code>case</code>/<code>default</code>)</td></tr><tr><td><code>chan</code></td><td>cria um canal: <code>chan()</code> / <code>chan(n)</code></td></tr><tr><td><code>true</code> / <code>false</code></td><td>literais booleanos</td></tr><tr><td><code>nil</code></td><td>opcional ausente (usado via <code>if let</code>)</td></tr><tr><td><code>self</code></td><td>a instância, dentro de um método</td></tr></table>",
 
 "h-apx-op":"Apêndice B — Operadores",
-"apx-op-table":"<table><tr><th>Grupo</th><th>Operadores</th><th>Notas</th></tr><tr><td>aritméticos</td><td><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>**</code></td><td><code>%</code> resto, <code>**</code> potência; inteiros verificam overflow</td></tr><tr><td>comparação</td><td><code>==</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code></td><td> </td></tr><tr><td>lógicos</td><td><code>&amp;&amp;</code> <code>||</code> <code>!</code></td><td><code>&amp;&amp;</code> e <code>||</code> fazem curto-circuito</td></tr><tr><td>atribuição</td><td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code></td><td>composta: <code>x += e</code> ≡ <code>x = x + e</code></td></tr><tr><td>intervalo</td><td><code>..</code> <code>..=</code></td><td><code>a..b</code> exclui b; <code>a..=b</code> inclui b</td></tr><tr><td>pertença</td><td><code>in</code></td><td>lista, string ou mapa</td></tr><tr><td>pipe</td><td><code>|></code></td><td><code>x |> f</code> ≡ <code>f(x)</code></td></tr><tr><td>tensor</td><td><code>@</code></td><td>multiplicação de matrizes</td></tr><tr><td>propagação</td><td><code>?</code></td><td>sufixo, sobre <code>Result</code></td></tr><tr><td>acesso</td><td><code>.</code> <code>[]</code> <code>()</code></td><td>membro, índice, chamada</td></tr></table>",
+"apx-op-table":"<table><tr><th>Grupo</th><th>Operadores</th><th>Notas</th></tr><tr><td>aritméticos</td><td><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>**</code></td><td><code>%</code> resto, <code>**</code> potência; inteiros verificam overflow</td></tr><tr><td>comparação</td><td><code>==</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code></td><td> </td></tr><tr><td>lógicos</td><td><code>&amp;&amp;</code> <code>||</code> <code>!</code></td><td><code>&amp;&amp;</code> e <code>||</code> fazem curto-circuito</td></tr><tr><td>atribuição</td><td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code></td><td>composta: <code>x += e</code> ≡ <code>x = x + e</code></td></tr><tr><td>intervalo</td><td><code>..</code> <code>..=</code></td><td><code>a..b</code> exclui b; <code>a..=b</code> inclui b</td></tr><tr><td>pertença</td><td><code>in</code></td><td>lista, string ou mapa</td></tr><tr><td>pipe</td><td><code>|></code></td><td><code>x |> f</code> ≡ <code>f(x)</code></td></tr><tr><td>tensor</td><td><code>@</code></td><td>multiplicação de matrizes</td></tr><tr><td>canal</td><td><code>&lt;-</code></td><td><code>c &lt;- v</code> envia; <code>&lt;- c</code> recebe</td></tr><tr><td>propagação</td><td><code>?</code></td><td>sufixo, sobre <code>Result</code></td></tr><tr><td>acesso</td><td><code>.</code> <code>[]</code> <code>()</code></td><td>membro, índice, chamada</td></tr></table>",
 
 "h-apx-bi":"Apêndice C — Builtins nativos",
 "apx-bi-1":"Estas funções estão sempre disponíveis, sem <code>import</code>:",
@@ -716,6 +791,10 @@ const BR = {
 "nav-validate":"Validar a instalação",
 "h-validate":"Validar a instalação",
 "validate-1":"Depois de instalar, rode estes passos para confirmar que está tudo funcionando:",
+"nav-repl":"REPL interativo",
+"h-repl":"REPL — explorar de forma interativa",
+"repl-1":"O comando <code>ayize repl</code> abre um <em>read-eval-print loop</em>: você escreve uma linha, ela roda, o valor aparece. O estado <strong>persiste</strong> entre linhas (variáveis, funções, tipos, <code>import</code>), e um erro <strong>não derruba</strong> a sessão. É ideal para experimentar uma ideia antes de colocá-la num arquivo.",
+"repl-2":"Linhas incompletas (com <code>{</code>, <code>(</code> ou <code>[</code> em aberto) continuam na linha seguinte. <code>:help</code> mostra a ajuda; <code>:quit</code> (ou <kbd>Ctrl-D</kbd>) sai.",
 "validate-list":"<li>Versão: <code>ayize --version</code> deve mostrar <code>ayize 0.1.1</code>.</li><li>Programa: <code>ayize new demo &amp;&amp; cd demo &amp;&amp; ayize run</code> deve imprimir <code>Olá, Ayize!</code>.</li><li>Treinamento: crie um arquivo com o exemplo de <a href=\"#ai\">regressão linear</a> e rode-o — deve dar <code>W ≈ [1, 2]</code>.</li><li>LLM: rode o <a href=\"#llm\">programa completo do nanoGPT</a> — a loss cai para perto de zero e gera texto.</li><li>GPU (variante CUDA/wgpu): instale com <code>AYIZE_GPU</code>; os <code>matmul</code> grandes passam a rodar na placa (a loss desce do mesmo jeito).</li>",
 
 "h-intro":"O que é o Ayize",
@@ -737,7 +816,7 @@ const BR = {
 "h-start":"Primeiros passos",
 "start-1":"A execução começa em <code>fn main()</code>. <code>print</code> está sempre disponível (é um <em>builtin</em>, sem <code>import</code>). Crie <code>hello.az</code>:",
 "start-2":"A <em>toolchain</em> tem tudo o que você precisa, em um só comando <code>ayize</code>:",
-"start-cmds":"<table><tr><th>Comando</th><th>O que faz</th></tr><tr><td><code>ayize run [arquivo]</code></td><td>roda um programa (ou o entry do projeto)</td></tr><tr><td><code>ayize new &lt;nome&gt;</code></td><td>cria um projeto novo</td></tr><tr><td><code>ayize check</code></td><td>analisa sem executar (erros, tipos)</td></tr><tr><td><code>ayize fmt [--check]</code></td><td>formata o código</td></tr><tr><td><code>ayize test</code></td><td>roda as funções <code>test_*</code></td></tr><tr><td><code>ayize serve doc</code></td><td>abre esta documentação</td></tr><tr><td><code>ayize completions &lt;shell&gt;</code></td><td>gera o autocompletar (bash/zsh/fish)</td></tr></table>",
+"start-cmds":"<table><tr><th>Comando</th><th>O que faz</th></tr><tr><td><code>ayize run [arquivo]</code></td><td>roda um programa (ou o entry do projeto)</td></tr><tr><td><code>ayize repl</code></td><td>REPL interativo (read-eval-print)</td></tr><tr><td><code>ayize new &lt;nome&gt;</code></td><td>cria um projeto novo</td></tr><tr><td><code>ayize check</code></td><td>analisa sem executar (erros, tipos)</td></tr><tr><td><code>ayize fmt [--check]</code></td><td>formata o código</td></tr><tr><td><code>ayize test</code></td><td>roda as funções <code>test_*</code></td></tr><tr><td><code>ayize serve doc</code></td><td>abre esta documentação</td></tr><tr><td><code>ayize completions &lt;shell&gt;</code></td><td>gera o autocompletar (bash/zsh/fish)</td></tr></table>",
 
 "h-project":"Criar um projeto",
 "project-1":"<code>ayize new</code> gera a estrutura mínima de um projeto. Você entra na pasta e roda com <code>ayize run</code> (sem argumento, usa o <em>entry</em> do manifesto):",
@@ -821,13 +900,23 @@ const BR = {
 
 "gpu-1":"Os <code>matmul</code> grandes despacham para a GPU automaticamente — o <em>forward</em> e o <em>backward</em> rodam residentes no dispositivo (sem cópias por operação), em dois backends: CUDA nativo (NVIDIA) e wgpu portável (Vulkan/Metal/DX). Basta rodar o programa com uma variante GPU:",
 "gpu-2":"Para obter uma variante com GPU você não precisa compilar nada — instale-a com a variável <code>AYIZE_GPU</code> (Linux x86_64):",
+"nav-enum":"Tipos-soma (enum)",
+"nav-conc":"Concorrência",
+"h-enum":"Tipos-soma (enum)",
+"enum-1":"Um <code>enum</code> é um tipo cujo valor é <strong>uma de várias variantes</strong>, cada uma com (ou sem) campos. Constroem-se pelo nome e destruturam-se com <code>match</code> — ligando os campos. Convenção: variantes em PascalCase (<code>Circle</code>, <code>Empty</code>); um braço sem casar (e sem <code>_</code>) é erro (E0547), nunca um resultado errado em silêncio.",
+"enum-2":"Os padrões de construtor também funcionam com o <code>Result</code> embutido — <code>Ok(v)</code> e <code>Err(e)</code> destruturam-se diretamente (sem <code>is_ok</code>/<code>unwrap_or</code>):",
+"h-conc":"Concorrência",
+"conc-1":"A Ayize tem concorrência <strong>CSP</strong> (estilo Go) na linguagem, com um escalonador <strong>cooperativo e determinista</strong>: só uma tarefa roda de cada vez e a ordem é reproduzível. Pelos canais viajam <strong>dados</strong> (não memória compartilhada) — <em>“share by communicating”</em>.",
+"conc-ops":"<li><code>chan()</code> / <code>chan(n)</code> — cria um canal (buffer opcional <code>n</code>).</li><li><code>spawn f(args)</code> — roda a função de topo <code>f</code> numa tarefa concorrente.</li><li><code>c &lt;- v</code> — envia; <code>&lt;- c</code> — recebe (bloqueiam conforme o canal).</li><li><code>close(c)</code> — fecha o canal; <code>for v in c</code> — itera o canal como <strong>stream</strong> até fechar.</li>",
+"conc-2":"<code>select</code> espera pelo <strong>primeiro canal pronto</strong> (escolha determinista, pela ordem dos casos). Com <code>default</code>, não bloqueia (sondagem):",
+"conc-note":"Só tipos de <strong>dados</strong> atravessam um canal — enviar uma closure/struct é erro (E0571). Um <em>deadlock</em> (todas as tarefas bloqueadas) é detectado e reportado (E0576), nunca trava.",
 
 "h-apx-kw":"Apêndice A — Palavras-chave e statements",
 "apx-kw-1":"As palavras-chave ativas da linguagem e o que cada uma faz:",
-"apx-kw-table":"<table><tr><th>Keyword</th><th>O que faz</th></tr><tr><td><code>fn</code></td><td>declara uma função (ou closure: <code>fn(x) => ...</code>)</td></tr><tr><td><code>let</code></td><td>declara uma variável (imutável)</td></tr><tr><td><code>mut</code></td><td>com <code>let</code>, torna a variável mutável</td></tr><tr><td><code>type</code></td><td>declara um struct (campos + métodos)</td></tr><tr><td><code>contract</code></td><td>declara uma interface estrutural</td></tr><tr><td><code>import</code></td><td>importa um módulo da stdlib ou arquivo local</td></tr><tr><td><code>return</code></td><td>retorna um valor da função</td></tr><tr><td><code>if</code> / <code>else</code></td><td>execução condicional</td></tr><tr><td><code>match</code></td><td>despacha pelo valor (com <code>=></code> e <code>_</code>)</td></tr><tr><td><code>for</code> ... <code>in</code></td><td>itera lista, intervalo, mapa</td></tr><tr><td><code>while</code></td><td>repete enquanto a condição é verdadeira</td></tr><tr><td><code>loop</code></td><td>repete para sempre (sai com <code>break</code>)</td></tr><tr><td><code>break</code> / <code>continue</code></td><td>sai do laço / salta para a próxima iteração</td></tr><tr><td><code>defer</code></td><td>adia uma expressão para o fim do bloco (LIFO)</td></tr><tr><td><code>true</code> / <code>false</code></td><td>literais booleanos</td></tr><tr><td><code>nil</code></td><td>opcional ausente (usado via <code>if let</code>)</td></tr><tr><td><code>self</code></td><td>a instância, dentro de um método</td></tr></table>",
+"apx-kw-table":"<table><tr><th>Keyword</th><th>O que faz</th></tr><tr><td><code>fn</code></td><td>declara uma função (ou closure: <code>fn(x) => ...</code>)</td></tr><tr><td><code>let</code></td><td>declara uma variável (imutável)</td></tr><tr><td><code>mut</code></td><td>com <code>let</code>, torna a variável mutável</td></tr><tr><td><code>type</code></td><td>declara um struct (campos + métodos)</td></tr><tr><td><code>contract</code></td><td>declara uma interface estrutural</td></tr><tr><td><code>import</code></td><td>importa um módulo da stdlib ou arquivo local</td></tr><tr><td><code>return</code></td><td>retorna um valor da função</td></tr><tr><td><code>if</code> / <code>else</code></td><td>execução condicional</td></tr><tr><td><code>match</code></td><td>despacha pelo valor (com <code>=></code> e <code>_</code>)</td></tr><tr><td><code>for</code> ... <code>in</code></td><td>itera lista, intervalo, mapa</td></tr><tr><td><code>while</code></td><td>repete enquanto a condição é verdadeira</td></tr><tr><td><code>loop</code></td><td>repete para sempre (sai com <code>break</code>)</td></tr><tr><td><code>break</code> / <code>continue</code></td><td>sai do laço / salta para a próxima iteração</td></tr><tr><td><code>defer</code></td><td>adia uma expressão para o fim do bloco (LIFO)</td></tr><tr><td><code>enum</code></td><td>declara um tipo-soma (variantes)</td></tr><tr><td><code>spawn</code></td><td>corre uma função numa tarefa concorrente</td></tr><tr><td><code>select</code></td><td>espera no 1.º canal pronto (<code>case</code>/<code>default</code>)</td></tr><tr><td><code>chan</code></td><td>cria um canal: <code>chan()</code> / <code>chan(n)</code></td></tr><tr><td><code>true</code> / <code>false</code></td><td>literais booleanos</td></tr><tr><td><code>nil</code></td><td>opcional ausente (usado via <code>if let</code>)</td></tr><tr><td><code>self</code></td><td>a instância, dentro de um método</td></tr></table>",
 
 "h-apx-op":"Apêndice B — Operadores",
-"apx-op-table":"<table><tr><th>Grupo</th><th>Operadores</th><th>Notas</th></tr><tr><td>aritméticos</td><td><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>**</code></td><td><code>%</code> resto, <code>**</code> potência; inteiros verificam overflow</td></tr><tr><td>comparação</td><td><code>==</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code></td><td> </td></tr><tr><td>lógicos</td><td><code>&amp;&amp;</code> <code>||</code> <code>!</code></td><td><code>&amp;&amp;</code> e <code>||</code> fazem curto-circuito</td></tr><tr><td>atribuição</td><td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code></td><td>composta: <code>x += e</code> ≡ <code>x = x + e</code></td></tr><tr><td>intervalo</td><td><code>..</code> <code>..=</code></td><td><code>a..b</code> exclui b; <code>a..=b</code> inclui b</td></tr><tr><td>pertencimento</td><td><code>in</code></td><td>lista, string ou mapa</td></tr><tr><td>pipe</td><td><code>|></code></td><td><code>x |> f</code> ≡ <code>f(x)</code></td></tr><tr><td>tensor</td><td><code>@</code></td><td>multiplicação de matrizes</td></tr><tr><td>propagação</td><td><code>?</code></td><td>sufixo, sobre <code>Result</code></td></tr><tr><td>acesso</td><td><code>.</code> <code>[]</code> <code>()</code></td><td>membro, índice, chamada</td></tr></table>",
+"apx-op-table":"<table><tr><th>Grupo</th><th>Operadores</th><th>Notas</th></tr><tr><td>aritméticos</td><td><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>**</code></td><td><code>%</code> resto, <code>**</code> potência; inteiros verificam overflow</td></tr><tr><td>comparação</td><td><code>==</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code></td><td> </td></tr><tr><td>lógicos</td><td><code>&amp;&amp;</code> <code>||</code> <code>!</code></td><td><code>&amp;&amp;</code> e <code>||</code> fazem curto-circuito</td></tr><tr><td>atribuição</td><td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code></td><td>composta: <code>x += e</code> ≡ <code>x = x + e</code></td></tr><tr><td>intervalo</td><td><code>..</code> <code>..=</code></td><td><code>a..b</code> exclui b; <code>a..=b</code> inclui b</td></tr><tr><td>pertencimento</td><td><code>in</code></td><td>lista, string ou mapa</td></tr><tr><td>pipe</td><td><code>|></code></td><td><code>x |> f</code> ≡ <code>f(x)</code></td></tr><tr><td>tensor</td><td><code>@</code></td><td>multiplicação de matrizes</td></tr><tr><td>canal</td><td><code>&lt;-</code></td><td><code>c &lt;- v</code> envia; <code>&lt;- c</code> recebe</td></tr><tr><td>propagação</td><td><code>?</code></td><td>sufixo, sobre <code>Result</code></td></tr><tr><td>acesso</td><td><code>.</code> <code>[]</code> <code>()</code></td><td>membro, índice, chamada</td></tr></table>",
 
 "h-apx-bi":"Apêndice C — Builtins nativos",
 "apx-bi-1":"Estas funções estão sempre disponíveis, sem <code>import</code>:",
@@ -850,6 +939,10 @@ const EN = {
 "nav-validate":"Validate your install",
 "h-validate":"Validate your install",
 "validate-1":"After installing, run these steps to confirm everything works:",
+"nav-repl":"Interactive REPL",
+"h-repl":"REPL — explore interactively",
+"repl-1":"The <code>ayize repl</code> command opens a <em>read-eval-print loop</em>: you type a line, it runs, the value shows up. State <strong>persists</strong> across lines (variables, functions, types, <code>import</code>), and an error <strong>does not crash</strong> the session. Great for trying an idea before putting it in a file.",
+"repl-2":"Incomplete lines (with an open <code>{</code>, <code>(</code> or <code>[</code>) continue on the next line. <code>:help</code> shows help; <code>:quit</code> (or <kbd>Ctrl-D</kbd>) exits.",
 "validate-list":"<li>Version: <code>ayize --version</code> should show <code>ayize 0.1.1</code>.</li><li>Program: <code>ayize new demo &amp;&amp; cd demo &amp;&amp; ayize run</code> should print <code>Olá, Ayize!</code>.</li><li>Training: create a file with the <a href=\"#ai\">linear regression</a> example and run it — it should give <code>W ≈ [1, 2]</code>.</li><li>LLM: run the <a href=\"#llm\">complete nanoGPT program</a> — the loss drops close to zero and generates text.</li><li>GPU (CUDA/wgpu variant): install with <code>AYIZE_GPU</code>; large <code>matmul</code>s then run on the device (loss still decreases).</li>",
 
 "h-intro":"What is Ayize",
@@ -871,7 +964,7 @@ const EN = {
 "h-start":"Getting started",
 "start-1":"Execution begins at <code>fn main()</code>. <code>print</code> is always available (it is a <em>builtin</em>, no <code>import</code>). Create <code>hello.az</code>:",
 "start-2":"The <em>toolchain</em> has everything you need, in a single <code>ayize</code> command:",
-"start-cmds":"<table><tr><th>Command</th><th>What it does</th></tr><tr><td><code>ayize run [file]</code></td><td>runs a program (or the project entry)</td></tr><tr><td><code>ayize new &lt;name&gt;</code></td><td>creates a new project</td></tr><tr><td><code>ayize check</code></td><td>analyzes without running (errors, types)</td></tr><tr><td><code>ayize fmt [--check]</code></td><td>formats the code</td></tr><tr><td><code>ayize test</code></td><td>runs the <code>test_*</code> functions</td></tr><tr><td><code>ayize serve doc</code></td><td>opens this documentation</td></tr><tr><td><code>ayize completions &lt;shell&gt;</code></td><td>generates shell completion (bash/zsh/fish)</td></tr></table>",
+"start-cmds":"<table><tr><th>Command</th><th>What it does</th></tr><tr><td><code>ayize run [file]</code></td><td>runs a program (or the project entry)</td></tr><tr><td><code>ayize repl</code></td><td>interactive REPL (read-eval-print)</td></tr><tr><td><code>ayize new &lt;name&gt;</code></td><td>creates a new project</td></tr><tr><td><code>ayize check</code></td><td>analyzes without running (errors, types)</td></tr><tr><td><code>ayize fmt [--check]</code></td><td>formats the code</td></tr><tr><td><code>ayize test</code></td><td>runs the <code>test_*</code> functions</td></tr><tr><td><code>ayize serve doc</code></td><td>opens this documentation</td></tr><tr><td><code>ayize completions &lt;shell&gt;</code></td><td>generates shell completion (bash/zsh/fish)</td></tr></table>",
 
 "h-project":"Create a project",
 "project-1":"<code>ayize new</code> generates the minimal structure of a project. You enter the folder and run with <code>ayize run</code> (with no argument, it uses the manifest <em>entry</em>):",
@@ -955,13 +1048,23 @@ const EN = {
 
 "gpu-1":"Large <code>matmul</code> operations dispatch to the GPU automatically — the <em>forward</em> and <em>backward</em> run resident on the device (no copies per operation), on two backends: native CUDA (NVIDIA) and portable wgpu (Vulkan/Metal/DX). Just run the program with a GPU variant:",
 "gpu-2":"To get a GPU variant you don't need to compile anything — install it with the <code>AYIZE_GPU</code> variable (Linux x86_64):",
+"nav-enum":"Sum types (enum)",
+"nav-conc":"Concurrency",
+"h-enum":"Sum types (enum)",
+"enum-1":"An <code>enum</code> is a type whose value is <strong>one of several variants</strong>, each with (or without) fields. They are built by name and destructured with <code>match</code> — binding the fields. Convention: variants in PascalCase (<code>Circle</code>, <code>Empty</code>); an arm that doesn't match (and without <code>_</code>) is an error (E0547), never a wrong result silently.",
+"enum-2":"Constructor patterns also work with the built-in <code>Result</code> — <code>Ok(v)</code> and <code>Err(e)</code> are destructured directly (no <code>is_ok</code>/<code>unwrap_or</code>):",
+"h-conc":"Concurrency",
+"conc-1":"Ayize has <strong>CSP</strong> concurrency (Go style) in the language, with a <strong>cooperative, deterministic</strong> scheduler: only one task runs at a time and the order is reproducible. <strong>Data</strong> travels through channels (not shared memory) — <em>“share by communicating”</em>.",
+"conc-ops":"<li><code>chan()</code> / <code>chan(n)</code> — creates a channel (optional buffer <code>n</code>).</li><li><code>spawn f(args)</code> — runs the top-level function <code>f</code> in a concurrent task.</li><li><code>c &lt;- v</code> — sends; <code>&lt;- c</code> — receives (they block depending on the channel).</li><li><code>close(c)</code> — closes the channel; <code>for v in c</code> — iterates the channel as a <strong>stream</strong> until it closes.</li>",
+"conc-2":"<code>select</code> waits for the <strong>first ready channel</strong> (deterministic choice, by the order of the cases). With <code>default</code>, it doesn't block (polling):",
+"conc-note":"Only <strong>data</strong> types cross a channel — sending a closure/struct is an error (E0571). A <em>deadlock</em> (all tasks blocked) is detected and reported (E0576), it never hangs.",
 
 "h-apx-kw":"Appendix A — Keywords and statements",
 "apx-kw-1":"The language's active keywords and what each one does:",
-"apx-kw-table":"<table><tr><th>Keyword</th><th>What it does</th></tr><tr><td><code>fn</code></td><td>declares a function (or closure: <code>fn(x) => ...</code>)</td></tr><tr><td><code>let</code></td><td>declares a variable (immutable)</td></tr><tr><td><code>mut</code></td><td>with <code>let</code>, makes the variable mutable</td></tr><tr><td><code>type</code></td><td>declares a struct (fields + methods)</td></tr><tr><td><code>contract</code></td><td>declares a structural interface</td></tr><tr><td><code>import</code></td><td>imports a module from the stdlib or a local file</td></tr><tr><td><code>return</code></td><td>returns a value from the function</td></tr><tr><td><code>if</code> / <code>else</code></td><td>conditional execution</td></tr><tr><td><code>match</code></td><td>dispatches by value (with <code>=></code> and <code>_</code>)</td></tr><tr><td><code>for</code> ... <code>in</code></td><td>iterates over a list, range, map</td></tr><tr><td><code>while</code></td><td>repeats while the condition is true</td></tr><tr><td><code>loop</code></td><td>repeats forever (exits with <code>break</code>)</td></tr><tr><td><code>break</code> / <code>continue</code></td><td>exits the loop / skips to the next iteration</td></tr><tr><td><code>defer</code></td><td>postpones an expression to the end of the block (LIFO)</td></tr><tr><td><code>true</code> / <code>false</code></td><td>boolean literals</td></tr><tr><td><code>nil</code></td><td>absent optional (used via <code>if let</code>)</td></tr><tr><td><code>self</code></td><td>the instance, inside a method</td></tr></table>",
+"apx-kw-table":"<table><tr><th>Keyword</th><th>What it does</th></tr><tr><td><code>fn</code></td><td>declares a function (or closure: <code>fn(x) => ...</code>)</td></tr><tr><td><code>let</code></td><td>declares a variable (immutable)</td></tr><tr><td><code>mut</code></td><td>with <code>let</code>, makes the variable mutable</td></tr><tr><td><code>type</code></td><td>declares a struct (fields + methods)</td></tr><tr><td><code>contract</code></td><td>declares a structural interface</td></tr><tr><td><code>import</code></td><td>imports a module from the stdlib or a local file</td></tr><tr><td><code>return</code></td><td>returns a value from the function</td></tr><tr><td><code>if</code> / <code>else</code></td><td>conditional execution</td></tr><tr><td><code>match</code></td><td>dispatches by value (with <code>=></code> and <code>_</code>)</td></tr><tr><td><code>for</code> ... <code>in</code></td><td>iterates over a list, range, map</td></tr><tr><td><code>while</code></td><td>repeats while the condition is true</td></tr><tr><td><code>loop</code></td><td>repeats forever (exits with <code>break</code>)</td></tr><tr><td><code>break</code> / <code>continue</code></td><td>exits the loop / skips to the next iteration</td></tr><tr><td><code>defer</code></td><td>postpones an expression to the end of the block (LIFO)</td></tr><tr><td><code>enum</code></td><td>declares a sum type (variants)</td></tr><tr><td><code>spawn</code></td><td>runs a function in a concurrent task</td></tr><tr><td><code>select</code></td><td>waits on the first ready channel (<code>case</code>/<code>default</code>)</td></tr><tr><td><code>chan</code></td><td>creates a channel: <code>chan()</code> / <code>chan(n)</code></td></tr><tr><td><code>true</code> / <code>false</code></td><td>boolean literals</td></tr><tr><td><code>nil</code></td><td>absent optional (used via <code>if let</code>)</td></tr><tr><td><code>self</code></td><td>the instance, inside a method</td></tr></table>",
 
 "h-apx-op":"Appendix B — Operators",
-"apx-op-table":"<table><tr><th>Group</th><th>Operators</th><th>Notes</th></tr><tr><td>arithmetic</td><td><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>**</code></td><td><code>%</code> remainder, <code>**</code> power; integers check overflow</td></tr><tr><td>comparison</td><td><code>==</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code></td><td> </td></tr><tr><td>logical</td><td><code>&amp;&amp;</code> <code>||</code> <code>!</code></td><td><code>&amp;&amp;</code> and <code>||</code> short-circuit</td></tr><tr><td>assignment</td><td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code></td><td>compound: <code>x += e</code> ≡ <code>x = x + e</code></td></tr><tr><td>range</td><td><code>..</code> <code>..=</code></td><td><code>a..b</code> excludes b; <code>a..=b</code> includes b</td></tr><tr><td>membership</td><td><code>in</code></td><td>list, string or map</td></tr><tr><td>pipe</td><td><code>|></code></td><td><code>x |> f</code> ≡ <code>f(x)</code></td></tr><tr><td>tensor</td><td><code>@</code></td><td>matrix multiplication</td></tr><tr><td>propagation</td><td><code>?</code></td><td>suffix, over <code>Result</code></td></tr><tr><td>access</td><td><code>.</code> <code>[]</code> <code>()</code></td><td>member, index, call</td></tr></table>",
+"apx-op-table":"<table><tr><th>Group</th><th>Operators</th><th>Notes</th></tr><tr><td>arithmetic</td><td><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>**</code></td><td><code>%</code> remainder, <code>**</code> power; integers check overflow</td></tr><tr><td>comparison</td><td><code>==</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code></td><td> </td></tr><tr><td>logical</td><td><code>&amp;&amp;</code> <code>||</code> <code>!</code></td><td><code>&amp;&amp;</code> and <code>||</code> short-circuit</td></tr><tr><td>assignment</td><td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code></td><td>compound: <code>x += e</code> ≡ <code>x = x + e</code></td></tr><tr><td>range</td><td><code>..</code> <code>..=</code></td><td><code>a..b</code> excludes b; <code>a..=b</code> includes b</td></tr><tr><td>membership</td><td><code>in</code></td><td>list, string or map</td></tr><tr><td>pipe</td><td><code>|></code></td><td><code>x |> f</code> ≡ <code>f(x)</code></td></tr><tr><td>tensor</td><td><code>@</code></td><td>matrix multiplication</td></tr><tr><td>channel</td><td><code>&lt;-</code></td><td><code>c &lt;- v</code> sends; <code>&lt;- c</code> receives</td></tr><tr><td>propagation</td><td><code>?</code></td><td>suffix, over <code>Result</code></td></tr><tr><td>access</td><td><code>.</code> <code>[]</code> <code>()</code></td><td>member, index, call</td></tr></table>",
 
 "h-apx-bi":"Appendix C — Native builtins",
 "apx-bi-1":"These functions are always available, without <code>import</code>:",
